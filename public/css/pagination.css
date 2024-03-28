@@ -1,0 +1,188 @@
+.pagination{
+    width: 100%;
+    height: auto;
+    margin: 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination .pagination-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.pagination-container li:first-child a{
+    width: 90px;
+    height: 40px;
+    background-color: var(--color-background-dark);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-container li:first-child a:hover{
+    background-color: var(--color-primary-light);
+}
+
+.pagination-container .pagination-item a{
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-background-dark);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-container .pagination-item a.active{
+    background-color: var(--color-primary-light);
+}
+
+.pagination-container li:last-child a{
+    width: 90px;
+    height: 40px;
+    background-color: var(--color-background-dark);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-container li:last-child a:hover{
+    background-color: var(--color-primary-light);
+}
+
+.pagination-container .pagination-item a:hover{
+    background-color: var(--color-primary-light);
+}
+
+.pagination-container li a.disable{
+    pointer-events: none;
+    background-color: var(--color-secondary-dark);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-btn-prev-movil{
+    display: none;
+}
+
+.pagination-btn-next-movil{
+    display: none;
+}
+
+.pagination .pagination-movile-container{
+    display: none;
+}
+
+@media (max-width: 600px){
+    .pagination{
+        flex-direction: column;
+    }
+
+    .pagination .pagination-container{
+        display: none;
+    }
+
+    .pagination .pagination-movile{
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .pagination-btn-prev-movil{
+        display: block;
+        width: 100px;
+        height: 50px;
+    }
+
+    .pagination-btn-prev-movil a{
+        background-color: var(--color-background-dark);
+        color: #fff;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pagination-btn-prev-movil a:hover{
+        background-color: var(--color-primary-light);
+    }
+
+    .pagination-btn-prev-movil a.disable{
+        pointer-events: none;
+        background-color: var(--color-secondary-dark);
+    }
+   
+    .pagination-btn-next-movil{
+        display: block;
+        width: 100px;
+        height: 50px;
+    }
+
+    .pagination-btn-next-movil a{
+        background-color: var(--color-background-dark);
+        color: #fff;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pagination-btn-next-movil a:hover{
+        background-color: var(--color-primary-light);
+    }
+
+    .pagination-btn-next-movil a.disable{
+        pointer-events: none;
+        background-color: var(--color-secondary-dark);
+    }
+
+    .pagination .pagination-movile-container{
+        width: 100%;
+        height: auto;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pagination-item a{
+        background-color: var(--color-background-dark);
+        color: #fff;
+        width: auto;
+        padding: 10px 13px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pagination-item a:hover{
+        background-color: var(--color-primary-light);
+    }
+
+    .pagination-item a.active{
+        background-color: var(--color-primary-light);
+    }
+}

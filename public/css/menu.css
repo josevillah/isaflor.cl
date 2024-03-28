@@ -1,0 +1,457 @@
+/* * Definición de variables */
+:root{
+    --bgcolor-menu: #fff;
+    --border-input: #c9c9c9;
+    --border-input-focus: #ff8c2f;
+    --color-input-focus: #ff8c2f;
+    --bg-menu-categories: #1f2937;
+}
+
+.header-bar{
+    width: 100%;
+    height: 80px;
+    background-color: var(--bgcolor-menu);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 90;
+}
+
+.header-bar .container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 30px;
+}
+
+.container-logo{
+    width: 10%;
+    height: 100%;
+}
+
+.menu{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-links ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.menu-links ul li{
+    list-style: none;
+}
+
+.menu-links ul li.cart{
+    position: relative;
+}
+
+.menu-links ul li.cart span{
+    display: none;
+    background-color: var(--border-input-focus);
+    color: #fff;
+    padding: 4px 4px;
+    font-weight: bold;
+    border-radius: 50%;
+    position: absolute;
+    top: 0px;
+    right: -8px;
+}
+
+.menu-links ul li.cart span.active{
+    display: block;
+}
+
+.menu-links ul li a{
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: var(--color-primary-dark);
+    font-weight: bold;
+    transition: all 0.5s ease;
+}
+
+
+.menu-links ul li a:hover{
+    color: var(--color-input-focus);
+}
+
+.menu-links ul li a:focus{
+    color: var(--color-input-focus);
+    outline: none;
+}
+
+.menu-links ul li.cart{
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: var(--color-primary-dark);
+    font-weight: bold;
+    transition: all 0.5s ease;
+}
+
+.menu-links ul li.cart:hover{
+    color: var(--color-input-focus);
+}
+
+.menu-toggle-movil{
+    display: none;
+}
+
+.search-bar{
+    width: 50%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.menu-toggle{
+    width: auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.btn-bar{
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    color: var(--color-primary-dark);
+    transition: all 0.5s ease;
+}
+
+.btn-bar:hover{
+    color: var(--color-input-focus);
+}
+
+.btn-bar:focus{
+    color: var(--color-input-focus);
+    outline: none;
+}
+
+/* * sidebar categorias */
+.container-menu-categories {
+    width: 100%;
+    height: 100vh;
+    background-color: #3a3a3a7a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 130;
+    opacity: 0; /* Inicialmente oculto */
+    pointer-events: none; /* Para evitar clics en elementos ocultos */
+    transition: opacity 0.5s ease; /* Transición suave de opacidad */
+}
+
+.container-menu-categories.show {
+    opacity: 1; /* Mostrar el menú */
+    pointer-events: auto; /* Permitir clics en elementos visibles */
+}
+
+.menu-categories {
+    width: 300px;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    left: -100%; /* Ocultar el menú fuera de la pantalla por defecto */
+    top: 0;
+    z-index: 100;
+    transition: left 0.5s ease; /* Aplicar transición solo a la propiedad left */
+}
+
+.menu-categories.show {
+    left: 0; /* Mostrar el menú */
+}
+
+.header-menu{
+    width: 100%;
+    height: 80px;
+    background-color: var(--bg-menu-categories);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.header-menu .container-close-button button{
+    color: #fff;
+}
+
+.header-menu .container-close-button button:hover{
+    color: #ff4242;
+}
+
+.container-menu {
+    width: 100%;
+    overflow-y: auto; /* Aplicar desplazamiento vertical */
+    max-height: 90vh; /* Establecer la altura máxima */
+}
+
+.container-menu ul {
+    overflow-y: scroll; /* Aplica desplazamiento vertical si es necesario */
+    overflow-x: hidden; /* Oculta el desplazamiento horizontal */
+}
+
+.container-menu li{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-menu li div{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.parent-categories{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 15px 20px;
+    color: var(--color-primary-dark);
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border-left: 8px solid #fff;
+}
+
+.parent-categories:hover{
+    color: var(--color-input-focus);
+    /* border-left: 8px solid var(--color-input-focus); */
+}
+
+.dropdown-container {
+    width: 100%;
+    overflow: hidden;
+    height: 0; /* Altura inicial del submenu */
+    background-color: #ebebeb;
+    transition: height 0.5s ease; /* Transición suave de la altura máxima */
+}
+
+.dropdown-container.show {
+    height: auto; /* Altura máxima cuando se muestra el submenu */
+    overflow: hidden;
+}
+
+.list-dropdown{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 15px 20px;
+    color: var(--color-primary-dark);
+    font-weight: bold;
+    border-left: 8px solid #fff;
+}
+
+.list-dropdown:hover{
+    color: var(--color-input-focus);
+    border-left: 8px solid var(--color-input-focus);
+}
+
+
+.container-menu-movil {
+    width: 100%;
+    height: 100vh;
+    background-color: #3a3a3a7a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 130;
+    opacity: 0; /* Inicialmente oculto */
+    pointer-events: none; /* Para evitar clics en elementos ocultos */
+    transition: opacity 0.5s ease; /* Transición suave de opacidad */
+}
+
+.container-menu-movil.show {
+    opacity: 1; /* Mostrar el menú */
+    pointer-events: auto; /* Permitir clics en elementos visibles */
+}
+
+.menu-links-movil {
+    width: 300px;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    left: -100%; /* Ocultar el menú fuera de la pantalla por defecto*/
+    /* left: 0; */
+    top: 0;
+    z-index: 100;
+    transition: left 0.5s ease; /* Aplicar transición solo a la propiedad left */
+}
+
+.menu-links-movil.show {
+    left: 0; /* Mostrar el menú */
+}
+
+.link-movile li a{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 15px 20px;
+    color: var(--color-primary-dark);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 8px solid #fff;
+}
+
+.link-movile li a:hover{
+    color: var(--color-input-focus);
+    border-left: 8px solid var(--color-input-focus);
+}
+
+.search-container{
+    width: 100%;
+    min-height: 300px;
+    max-height: 300px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.search-container.searching{
+    opacity: 0.7;
+    align-items: center;
+}
+
+.search-container.show{
+    opacity: 1;
+    pointer-events: auto;
+    align-items: flex-start;
+}
+
+.search-results{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.search-results.show{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.search-results a.btn-search-product{
+    cursor: pointer;
+    width: 100%;
+    padding: 10px 20px;
+    color: var(--color-primary-dark);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-input);
+    transition: all 0.5s ease;
+}
+
+.search-results a.btn-search-product:hover{
+    color: var(--color-input-focus);
+}
+
+.btn-search-product img{
+    width: 80px;
+    height: 100%;
+    object-fit: contain;
+}
+
+.btn-search-product .search-info-product{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* * Media queries */
+@media (max-width: 1000px){
+    .search-container{
+        width: 200%;
+        left: -50%;
+    }
+}
+
+@media (max-width: 850px){
+    .menu-toggle{
+        display: none;
+    }
+
+    .menu-links{
+        display: none;
+    }
+
+    .menu-toggle-movil{
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container-logo{
+        width: auto;
+    }
+
+    .menu{
+        width: 60%;
+    }
+
+    .search-bar{
+        width: 100%;
+    }
+
+    .search-container{
+        width: 150%;
+        left: -30%;
+    }
+}
+
+@media (max-width: 600px){
+    .header-bar .container{
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 400px){
+    .search-bar{
+        width: 90%;
+    }
+}

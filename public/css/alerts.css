@@ -1,0 +1,83 @@
+.alert-container{
+    width: 100%;
+    height: 100dvh;
+    background-color: #1a1a1a7a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 900;
+    transition: all 0.5s ease;
+}
+
+.alert-container.show{
+    pointer-events: all;
+    opacity: 1;
+}
+
+.alert-container .alert{
+    width: 400px;
+    padding: 15px 10px;
+    background-color: #fff;
+    border-radius: 7px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.alert .alert-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ccc;
+}
+
+.alert .alert-header p{
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-primary-dark);
+}
+
+.alert-header .alert-close{
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--color-primary-dark);
+}
+
+.alert-header .alert-close:hover{
+    color: var(--color-close);
+}
+
+.alert .alert-body{
+    padding: 20px 0;
+}
+
+.alert-body p{
+    font-size: 18px;
+    color: var(--color-primary-dark);
+}
+
+.alert-body svg.success{
+    color: #3ece3e;
+}
+
+.alert-body svg.warning{
+    color: #fefe1c;
+}
+
+.alert-body svg.error{
+    color: #ff5454;
+}
+
+.alert.show{
+    opacity: 1;
+    pointer-events: all;
+}
