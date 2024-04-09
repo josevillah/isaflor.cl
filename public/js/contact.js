@@ -1,7 +1,6 @@
 import { Alert } from './alerts.js';
 
 const contact = document.querySelector('form[name="contact"]');
-const btnCloseAlert = document.querySelector('.alert-close');
 
 async function sendEmail(data) {
     try {
@@ -34,12 +33,3 @@ if(contact){
     });
 
 }
-
-if(btnCloseAlert){
-    btnCloseAlert.addEventListener('click', e => {
-        e.preventDefault();
-        const myAlert = new Alert();
-        myAlert.close();
-    });
-}
-

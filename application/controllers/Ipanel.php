@@ -16,11 +16,14 @@ class Ipanel extends CI_Controller {
             redirect('index.php/ipanel/dashboard');
         endif;
 
-		// Carga la vista del panel de inicio
         $title = 'Login - Panel de control';
         $fecha_actual = date("dmY:H:i:s");
-        $this->load->view('headers/header_admin', array('title' => $title, 'fecha_actual' => $fecha_actual));
-        $this->load->view('footers/footer_admin');
+        
+		// Carga la vista del panel de inicio
+        $this->load->view('headers/header_admin_login', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('bodys/login');
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_login');
 	}
 
     function verifySession() {
@@ -36,8 +39,9 @@ class Ipanel extends CI_Controller {
         );
 
         $this->load->model('usuarios_model');
+        
 
-        $users = $this->usuarios_model->getUsers($datos);
+        $users = $this->usuarios_model->getUsers();
         if($users):
             foreach($users as $user):
                 if($datos['username'] == $user['usuario']):
@@ -58,37 +62,66 @@ class Ipanel extends CI_Controller {
     function dashboard(){
         $this->verifySession();
         $title = 'Dashboard - Panel de control';
+        $fecha_actual = date("dmY:H:i:s");
 
-        $this->load->model('productos_model');
-        $datos = $this->productos_model->getCountCatSubCatPro();
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
 
-        $catidades = array(
-            'categorias' => $datos[0]['cantidad_catpadre'],
-            'subcategorias' => $datos[0]['cantidad_categorias'],
-            'productos' => $datos[0]['cantidad_productos'],
-            'usuarios' => $datos[0]['cantidad_usuarios']
-        );
+        if($arrayUrl[5] == 'Ipanel'):
+            $url = $arrayUrl[6];
+        endif;
 
-        $this->load->view('admin/header/admin_header', array('title' => $title));
-        $this->load->view('admin/setup/admin_menu');
-        $this->load->view('admin/bodys/admin_dashboard', array('user' => $this->session->userdata('usuario'), 'cantidades' => $catidades));
-        $this->load->view('admin/setup/admin_profile', array('user' => $this->session->userdata('usuario')));
-        $this->load->view('admin/alerts/myAlerts');
-        $this->load->view('admin/footer/admin_footer');
-    }
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/dashboard');
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+    }    
     
-    function store(){
+    function account(){
         $this->verifySession();
-
-        $title = 'Bodega - Panel de control';
-        $this->load->view('admin/header/admin_header', array('title' => $title));
-        $this->load->view('admin/setup/admin_menu');
-        $this->load->view('admin/bodys/admin_store', array('user' => $this->session->userdata('usuario')));
-        $this->load->view('admin/setup/admin_profile', array('user' => $this->session->userdata('usuario')));
-        $this->load->view('admin/alerts/myAlerts');
-        $this->load->view('admin/footer/admin_footer');
-    }
+        $title = 'Dashboard - Panel de control';
+        $fecha_actual = date("dmY:H:i:s");
     
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+        if($arrayUrl[5] == 'ipanel'):
+            $url = $arrayUrl[6];
+        endif;
+
+        $this->load->model('usuarios_model');
+        $user = $this->usuarios_model->getUserfromUser($this->session->userdata('usuario'));
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/account', array('user' => $user[0]));
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+    }
+
+    function changeDataForUser(){
+        $this->verifySession();
+        $this->load->model('usuarios_model');
+        $user = $this->usuarios_model->getUserfromUser($this->session->userdata('usuario'));
+
+        $data = $this->input->get();
+        $data['usuario'] = $user[0]['usuario'];
+
+        if(isset($data['usuario'])):
+            if(!empty($data['password']) && !empty($data['repassword'])):
+                if($data['password'] == $data['repassword']):
+                    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+                    $this->usuarios_model->changeDataForUser($data);
+                    echo json_encode(true);
+                else:
+                    echo json_encode(false);
+                endif;
+            else:
+                $this->usuarios_model->changeDataForUser($data);
+                echo json_encode(true);
+            endif;
+        endif;
+    }
     
     function logOut(){
         $this->verifySession();

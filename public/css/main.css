@@ -109,7 +109,7 @@ a{
     position: relative;
 }
 
-.form-control form.contact-form{
+form.contact-form{
     display: flex;
     flex-direction: column;
     justify-content: center;

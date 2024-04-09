@@ -1,0 +1,146 @@
+:root{
+    --admin-menu-color: #23252b;
+    --admin-menu-color-hover: #2f3f4f;
+    --admin-menu-color-active: #2f3f4f;
+    --admin-menu-color-text: #ffffff;
+    --admin-menu-color-text-hover: #ffffff;
+    --admin-menu-color-text-active: #ffffff;
+    --admin-menu-color-border: #2f3f4f;
+    --admin-menu-color-border-hover: #2f3f4f;
+    --admin-menu-color-border-active: #2f3f4f;
+    --color-primary-light: #f99838;
+
+}
+
+/* Reset CSS básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo para el scrollbar principal */
+::-webkit-scrollbar {
+    width: 10px;
+ }
+   
+ /* Estilo para el track (fondo) del scrollbar */
+ ::-webkit-scrollbar-track {
+     background-color: #f1f1f1;
+ }
+ 
+ /* Estilo para el thumb (el deslizador) del scrollbar */
+ ::-webkit-scrollbar-thumb {
+     background-color: #333333;
+ }
+ 
+ /* Estilo cuando el thumb está siendo arrastrado */
+ ::-webkit-scrollbar-thumb:hover {
+     background-color: #3d3d3d;
+ }
+
+ body{
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--color-background-light);
+    color: var(--text-normal-light);
+    position: relative;
+    display: flex;
+}
+
+button{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+.admin-menu-container{
+    width: 20%;
+    height: 100dvh;
+    background-color: var(--admin-menu-color);
+    overflow-x: hidden;
+}
+
+.admin-menu-container .admin-menu{
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.admin-menu .admin-menu-header{
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    background-color: #23252b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-menu-header .admin-menu-header-brand{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-menu .admin-menu-body{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.admin-menu-body li{
+    width: 100%;
+    height: auto;
+}
+
+.admin-menu-body li a {
+    width: 100%;
+    padding: 10px 5px;
+    font-size: 16px;
+    text-decoration: none;
+    background-color: var(--admin-menu-color);
+    color: #a0a0a0;
+    border-left: 5px solid transparent;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.1s ease-in-out; /* Transición suave para todos los cambios */
+}
+
+.admin-menu-body li a:hover {
+    color: #fff;
+    border-left-width: 15px; /* Cambiar solo el ancho del borde */
+}
+
+.admin-menu-body li a.active {
+    color: var(--color-primary-light);
+}
+
+@media (max-width: 1000px){
+    .admin-menu-container{
+        width: 30%;
+    }
+}
+
+@media (max-width: 700px){
+    .admin-menu-container{
+        width: 40%;
+    }
+}

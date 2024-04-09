@@ -1,0 +1,181 @@
+:root {
+    --color-close: #f12424;
+
+    /* Tema claro */
+    --color-primary-light: #ff7f00;
+    --color-secondary-light: #ff952b;
+    --color-background-light: #23252b;
+    --text-normal-light: #4f4f4f;
+    
+    /* Tema oscuro */
+    --color-primary-dark: #39424e;
+    --color-secondary-dark: #6b778d;
+    --color-background-dark: #222222;
+    --text-normal-dark: #58595c;
+}
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121111;
+    color: var(--text-normal-light);
+    position: relative;
+}
+
+button{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+.container-form{
+    width: 100%;
+    display: flex;
+}
+
+form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form svg{
+    transition: all 0.5s ease;
+}
+
+form input[type="text"]{
+    width: 100%;
+    height: 100%;
+    padding: 10px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid var(--color-primary-dark);
+    font-weight: bold;
+    color: #fff;
+    background-color: #23252b;
+    transition: all 0.5s ease;
+    font-size: 15px;
+}
+
+form input[type="text"]::placeholder{
+    color: #a0a0a0;
+    font-weight: normal;
+}
+
+form input[type="text"]:focus{
+    border: 1px solid var(--color-primary-light);
+}
+
+form input[type="text"]:focus ~ svg{
+    color: var(--color-primary-light);
+}
+
+form input[type="password"]{
+    width: 100%;
+    height: 100%;
+    padding: 10px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid var(--color-primary-dark);
+    font-weight: bold;
+    color: #fff;
+    background-color: #23252b;
+    transition: all 0.5s ease;
+    font-size: 15px;
+}
+
+form input[type="password"]::placeholder{
+    color: #a0a0a0;
+    font-weight: normal;
+}
+
+form input[type="password"]:focus{
+    border: 1px solid var(--color-primary-light);
+}
+
+form input[type="password"]:focus ~ svg{
+    color: var(--color-primary-light);
+}
+
+form input[type="submit"]{
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 10px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--color-primary-light);
+    transition: all 0.5s ease;
+    font-size: 15px;
+}
+
+form input[type="submit"]:hover{
+    background-color: var(--color-secondary-light);
+}
+
+form input[type="submit"]:focus{
+    background-color: var(--color-secondary-light);
+}
+
+form .form-control{
+    width: 93%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.form-control label{
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.form-control svg{
+    position: absolute;
+    top: 48%;
+    right: -20px;
+}
+
+.login-container{
+    height: 80dvh;
+    padding: 20px;
+}
+
+.box-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-container .login-box{
+    border-radius: 7px;
+    padding: 20px 40px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #23252b;
+}
+
+.login-box h1{
+    width: 100%;
+    font-size: 21px;
+    color: #fff;
+}
