@@ -32,21 +32,35 @@
                     <div class="product-info">
                         <h3><?php echo $ofertas[$i]['nompro']; ?></h3>
                         <div class="product-price-container">
+                            <?php if($ofertas[$i]['medida'] > 0): 
+                                $precio = $ofertas[$i]['prepro'] / $ofertas[$i]['medida'];
+
+                                if($ofertas[$i]['preoferpro'] > 0):
+                                    $precio_oferta = $ofertas[$i]['preoferpro'] / $ofertas[$i]['medida'];
+                                endif;
+                                else:
+                                $precio = $ofertas[$i]['prepro'];
+                                if($ofertas[$i]['preoferpro'] > 0):
+                                    $precio_oferta = $ofertas[$i]['preoferpro'];
+                                endif;
+                            endif; ?>
+
                             <?php if($ofertas[$i]['preoferpro'] > 0): ?>
-                                <p class="product-price-ofert">
-                                    <?php echo '$' . number_format($ofertas[$i]['preoferpro'], 0, ',', '.'); ?>
-                                    <span class="product-ofert">
-                                        <?php $descuento = (($ofertas[$i]['prepro'] - $ofertas[$i]['preoferpro']) / $ofertas[$i]['prepro']) * 100;?>
-                                        <?php echo round($descuento, 2) . "%"; ?>
-                                    </span>
-                                </p>
-                                <p class="product-price">
-                                    <?php echo '$' . number_format($ofertas[$i]['prepro'], 0, ',', '.'); ?>
-                                </p>
+
+                                <?php if($ofertas[$i]['medida'] > 0): ?>
+                                    <h3 class="product-value-ofert"><?php echo '$' . number_format($precio_oferta, 0, ',', '.')." m<sup>2</sup>"; ?></h3>
+                                    <h3 class="product-value-line"><?php echo '$' . number_format($precio, 0, ',', '.')." m<sup>2</sup>"; ?></h3>
                                 <?php else: ?>
-                                    <p class="product-price-ofert">
-                                        <?php echo '$' . number_format($ofertas[$i]['prepro'], 0, ',', '.'); ?>
-                                    </p>
+                                    <h3 class="product-value-ofert"><?php echo '$' . number_format($precio_oferta, 0, ',', '.'); ?></h3>
+                                    <h3 class="product-value-line"><?php echo '$' . number_format($precio, 0, ',', '.'); ?></h3>
+                                <?php endif; ?>
+
+                            <?php else: ?>
+                                <?php if($ofertas[$i]['medida'] > 0): ?>
+                                    <h3 class="product-value"><?php echo '$' . number_format($precio, 0, ',', '.')." m<sup>2</sup>"; ?></h3>
+                                <?php else: ?>
+                                    <h3 class="product-value"><?php echo '$' . number_format($precio, 0, ',', '.'); ?></h3>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </div>
                         <h5>SKU: <?php echo $ofertas[$i]['codpro']; ?></h5>

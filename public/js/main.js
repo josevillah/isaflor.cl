@@ -1,4 +1,3 @@
-const url = window.location.origin === 'http://localhost' ? `${window.location.origin}/isaflor.cl` : window.location.origin;
 const buttonUp = document.querySelector('.buttonUp');
 const containerButtonUp = document.querySelector('.container-buttonUp');
 if(buttonUp){

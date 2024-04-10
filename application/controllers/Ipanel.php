@@ -67,7 +67,7 @@ class Ipanel extends CI_Controller {
         $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $arrayUrl = explode('/', $currentURL);
 
-        if($arrayUrl[5] == 'Ipanel'):
+        if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
             $url = $arrayUrl[6];
         endif;
 
@@ -121,6 +121,24 @@ class Ipanel extends CI_Controller {
                 echo json_encode(true);
             endif;
         endif;
+    }
+
+    function categories(){
+        $this->verifySession();
+        $title = 'Dashboard - Panel de control';
+        $fecha_actual = date("dmY:H:i:s");
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+        if($arrayUrl[5] == 'ipanel'):
+            $url = $arrayUrl[6];
+        endif;
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/categories');
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
     }
     
     function logOut(){

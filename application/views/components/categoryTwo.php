@@ -27,23 +27,48 @@
                     <div class="product-info">
                         <h3><?php echo $categoryTwo[$i]['nombre_producto']; ?></h3>
                         <div class="product-price-container">
+                            <?php if($categoryTwo[$i]['medida'] > 0): 
+                                $precio = $categoryTwo[$i]['precio_producto'] / $categoryTwo[$i]['medida'];
+
+                                if($categoryTwo[$i]['precio_oferta'] > 0):
+                                    $precio_oferta = $categoryTwo[$i]['precio_oferta'] / $categoryTwo[$i]['medida'];
+                                endif;
+                                else:
+                                $precio = $categoryTwo[$i]['precio_producto'];
+                                if($categoryTwo[$i]['precio_oferta'] > 0):
+                                    $precio_oferta = $categoryTwo[$i]['precio_oferta'];
+                                endif;
+                            endif; ?>
+
                             <?php if($categoryTwo[$i]['precio_oferta'] > 0): ?>
-                                <p class="product-price-ofert">
-                                    <?php echo '$' . number_format($categoryTwo[$i]['precio_oferta'], 0, ',', '.'); ?>
-                                    <span class="product-ofert">
-                                        <?php $descuento = (($categoryTwo[$i]['precio_producto'] - $categoryTwo[$i]['precio_oferta']) / $categoryTwo[$i]['precio_producto']) * 100;?>
-                                        <?php echo round($descuento, 2) . "%"; ?>
-                                    </span>
-                                </p>
-                                <p class="product-price">
-                                    <?php echo '$' . number_format($categoryTwo[$i]['precio_producto'], 0, ',', '.'); ?>
-                                </p>
+
+                                <?php if($categoryTwo[$i]['medida'] > 0): ?>
+                                    <h3 class="product-value-ofert"><?php echo '$' . number_format($precio_oferta, 0, ',', '.')." m<sup>2</sup>"; ?></h3>
+                                    <h3 class="product-value-line"><?php echo '$' . number_format($precio, 0, ',', '.')." m<sup>2</sup>"; ?></h3>
                                 <?php else: ?>
-                                    <p class="product-price-ofert">
-                                        <?php echo '$' . number_format($categoryTwo[$i]['precio_producto'], 0, ',', '.'); ?>
-                                    </p>
+                                    <h3 class="product-value-ofert"><?php echo '$' . number_format($precio_oferta, 0, ',', '.'); ?></h3>
+                                    <h3 class="product-value-line"><?php echo '$' . number_format($precio, 0, ',', '.'); ?></h3>
+                                <?php endif; ?>
+
+                            <?php else: ?>
+                                <?php if($categoryTwo[$i]['medida'] > 0): ?>
+                                    <h3 class="product-value"><?php echo '$' . number_format($precio, 0, ',', '.')." m<sup>2</sup>"; ?></h3>
+                                <?php else: ?>
+                                    <h3 class="product-value"><?php echo '$' . number_format($precio, 0, ',', '.'); ?></h3>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </div>
+
+                        <?php if($categoryTwo[$i]['medida'] > 0 && $categoryTwo[$i]['id_categoria'] == 17): ?>
+                            <div class="box-value">
+                                <h3 class="product-value">Precio Metro Lineal: <?php echo '$' . number_format($categoryTwo[$i]['precio_producto'], 0, ',', '.'); ?></h3>
+                            </div>
+                        <?php elseif($categoryTwo[$i]['medida'] > 0): ?>
+                            <div class="box-value">
+                                <h3 class="product-value">Precio caja: <?php echo '$' . number_format($categoryTwo[$i]['precio_producto'], 0, ',', '.'); ?></h3>
+                            </div>
+                        <?php endif; ?>
+
                         <h5>SKU: <?php echo $categoryTwo[$i]['codigo_producto']; ?></h5>
                     </div>
                 </div>

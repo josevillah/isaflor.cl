@@ -1,5 +1,6 @@
 import { Alert } from './alerts.js';
 
+const url = window.location.origin === 'http://localhost' ? `${window.location.origin}/isaflor.cl` : window.location.origin;
 
 async function login(data) {
     try {

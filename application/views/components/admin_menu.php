@@ -7,13 +7,13 @@
         </div>
         <ul class="admin-menu-body">
             <li>
-                <a <?php echo $url == 'dashboard' ? 'class="active"' : '' ?> href="<?php echo base_url("index.php/Ipanel/dashboard"); ?>">
+                <a <?php echo $url == 'dashboard' ? 'class="active"' : '' ?> href="<?php echo base_url("index.php/ipanel/dashboard"); ?>">
                     <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-tabler"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9l3 3l-3 3" /><path d="M13 15l3 0" /><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" /></svg>
                     Inicio
                 </a>
             </li>
             <li>
-                <a <?php echo $url == 'categories' ? 'class="active"' : '' ?> href="#">
+                <a <?php echo $url == 'categories' ? 'class="active"' : '' ?> href="<?php echo base_url("index.php/ipanel/categories"); ?>">
                     <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-category"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4h6v6h-6z" /><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6h-6z" /><path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg>
                     Categorías
                 </a>

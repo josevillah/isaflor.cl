@@ -75,6 +75,7 @@ class Categorias_model extends CI_Model {
 			precio_oferta,
 			fecha,
 			cantidad,
+			medida,
 			agregarCarrito
 		FROM (
 			SELECT
@@ -89,6 +90,7 @@ class Categorias_model extends CI_Model {
 				p.preoferpro AS precio_oferta,
 				p.fecharegistro AS fecha,
 				p.cantidad AS cantidad,
+				p.medida AS medida,
 				p.agregarCarrito AS agregarCarrito,
 				ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY RAND()) AS row_num
 			FROM
