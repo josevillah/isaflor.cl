@@ -134,12 +134,68 @@ class Ipanel extends CI_Controller {
             $url = $arrayUrl[6];
         endif;
 
+        $this->load->model('categorias_model');
+
+        $categorias = $this->categorias_model->getCategorias();
+
         $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
         $this->load->view('components/admin_menu', array('url' => $url));
-        $this->load->view('bodys/categories');
+        $this->load->view('bodys/categories', array('categorias' => $categorias));
         $this->load->view('components/alerts');
-        $this->load->view('footers/footer_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('footers/footer_admin_categories', array('title' => $title, 'fecha_actual' => $fecha_actual));
     }
+
+    function searchCategories(){
+        $this->verifySession();
+        $data = $this->input->post();
+        $this->load->model('categorias_model');
+        $categorias = $this->categorias_model->searchCategories($data['searchCategory']);
+        echo json_encode($categorias);
+    }
+
+    function getAllCategories(){
+        $this->verifySession();
+        $this->load->model('categorias_model');
+        $categorias = $this->categorias_model->getCategorias();
+        echo json_encode($categorias);
+    }
+
+    function calendar(){
+        $this->verifySession();
+        $title = 'Panel de control - Calendario';
+        $fecha_actual = date("dmY:H:i:s");
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+        if($arrayUrl[5] == 'ipanel'):
+            $url = $arrayUrl[6];
+        endif;
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/calendar');
+        $this->load->view('footers/footer_admin_categories', array('title' => $title, 'fecha_actual' => $fecha_actual));
+    }
+    
+    
+    function products(){
+        $this->verifySession();
+        $title = 'Panel de control - Productos';
+        $fecha_actual = date("dmY:H:i:s");
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+        if($arrayUrl[5] == 'ipanel'):
+            $url = $arrayUrl[6];
+        endif;
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('components/alerts');
+        $this->load->view('bodys/admin_products');
+        $this->load->view('footers/footer_admin_product', array('title' => $title, 'fecha_actual' => $fecha_actual));
+    }
+    
     
     function logOut(){
         $this->verifySession();

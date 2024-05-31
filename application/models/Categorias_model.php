@@ -19,7 +19,7 @@ class Categorias_model extends CI_Model {
 			// Obtener los resultados como un array
 			$result = $query->result_array();
             return $result;
-        endif;
+		endif;
 	}
 	
 	function getDestacadas()
@@ -145,4 +145,14 @@ class Categorias_model extends CI_Model {
         endif;
 	} 
 
+	function searchCategories($cat)
+	{	
+		$query = $this->db->query("SELECT * FROM catpadre WHERE nombre like '%$cat%' ORDER BY nombre ASC LIMIT 5");
+        // Verificar si la consulta fue exitosa
+		if($query):
+			// Obtener los resultados como un array
+			$result = $query->result_array();
+            return $result;
+        endif;
+	}
 }

@@ -41,7 +41,7 @@ class Productos_model extends CI_Model {
         endif;
 	}
     
-	// Function para obtener el producto buscado
+	// Function para obtener el producto buscado METODO POST
 	function getProductosNombre($datos)
 	{
 		// Obtén el segmento que contiene los datos de búsqueda
@@ -64,6 +64,23 @@ class Productos_model extends CI_Model {
 			return $result;
 		endif;
 	}
+	
+	// Function para obtener el producto buscado METODO GET
+	function searchProduct($datos)
+	{
+		$query = "
+			SELECT * FROM productos
+			WHERE nompro LIKE '%".$datos."%' OR codpro LIKE '%".$datos."%'
+			AND oculto = 0
+			LIMIT 10
+		";
+		$query = $this->db->query($query);
+		if($query):
+			// Obtener los resultados como un array
+			$result = $query->result_array();
+			return $result;
+		endif;
+	}
 
 	function getOneProductId($id)
 	{	
@@ -76,6 +93,32 @@ class Productos_model extends CI_Model {
         endif;
 	}
 	
+	function getOneProductForEdit($id)
+	{   
+		$query = $this->db->query("
+			SELECT 
+				p.*, 
+				c.id AS id_subcategoria, 
+				c.nombre AS nombre_subcategoria, 
+				cp.id AS id_categoria, 
+				cp.nombre AS nombre_categoria
+			FROM 
+				productos AS p
+			LEFT JOIN 
+				categorias AS c ON p.idsubcat = c.id
+			LEFT JOIN 
+				catpadre AS cp ON c.idCatPadre = cp.id
+			WHERE 
+				p.id = $id;
+		");
+		// Verificar si la consulta fue exitosa
+		if ($query):
+			// Obtener el resultado como un array
+			$result = $query->row_array();
+			return $result;
+		endif;
+	}
+	
 	function getAllProducts($id)
 	{	
 		$query = $this->db->query("
@@ -83,6 +126,7 @@ class Productos_model extends CI_Model {
 			FROM productos p
 			INNER JOIN categorias c ON p.idsubcat = c.id
 			WHERE p.idsubcat = ? AND p.oculto = 0
+			AND p.cantidad > 0
 			ORDER BY p.prepro ASC
 		", array($id));
 
@@ -102,8 +146,8 @@ class Productos_model extends CI_Model {
 		FROM productos p
 		INNER JOIN categorias c ON p.idsubcat = c.id
 		WHERE p.idsubcat = ? AND p.oculto = 0
+		AND p.cantidad > 0
 		ORDER BY 
-		  CASE WHEN p.cantidad > 0 THEN 0 ELSE 1 END,  -- Prioriza los productos con cantidad > 0
 		  p.prepro ASC
 		LIMIT ?, 15	
 		", array($id, $iniciar));
@@ -142,8 +186,8 @@ class Productos_model extends CI_Model {
 			INNER JOIN categorias c ON p.idsubcat = c.id
 			WHERE p.preoferpro > 0
 			AND p.oculto = 0
+			AND p.cantidad > 0
 			ORDER BY 
-				CASE WHEN p.cantidad > 0 THEN 0 ELSE 1 END, -- Priorizar productos con cantidad > 0
 				p.preoferpro ASC -- Ordenar por preoferpro ascendente
 			LIMIT ?, 15
 		", array($iniciar));
@@ -176,6 +220,49 @@ class Productos_model extends CI_Model {
 			$result = $query->result_array();
             return $result;
         endif;
+	}
+
+	function editProduct($data){
+		// Obtener la fecha actual
+		$query = $this->db->query("SELECT NOW() as fecha_actual");
+		$result = $query->result_array();
+    	$fecha = $result[0]['fecha_actual'];
+		
+		$query = "
+			UPDATE productos SET 
+			codpro = '".$data['productCode']."',
+			nompro = '".$data['productName']."',
+			anchpro = '".$data['productAncho']."',
+			largpro = '".$data['productLargo']."',
+			prepro = '".$data['productPrice']."',
+			preoferpro = '".$data['productOfertPrice']."',
+			despro = '".$data['productDetails']."',
+			marcapro = '".$data['productTag']."',
+			idsubcat = '".$data['selectSubcategory']."',
+			fecharegistro = '".$fecha."',
+			medida = '".$data['productRend']."'
+			WHERE id = '".$data['idProduct']."';
+		";
+
+		$result = $this->db->query($query);
+        // Verificar si la consulta fue exitosa
+		if($result):
+            return true;
+        endif;
+	}
+	
+	function editStock($data){
+		$query = "
+			UPDATE productos SET 
+			cantidad = '".$data['stock']."'
+			WHERE id = '".$data['id']."';
+		";
+
+		$result = $this->db->query($query);
+        // Verificar si la consulta fue exitosa
+		if($result):
+			return true;
+		endif;
 	}
 
 }

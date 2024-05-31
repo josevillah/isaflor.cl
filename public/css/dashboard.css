@@ -11,11 +11,16 @@
     --color-primary-light: #ff7f00;
     --color-secondary-light: #ff9f00;
     --color-primary-dark: #39424e;
+
+    --color-background-calendar: #21448e;
 }
 
 .dashboard-container{
-    width: 80%;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
     background-color: var(--color-fondo-1);
+    margin-left: 230px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -24,7 +29,7 @@
 
 .dashboard-container .dashboard-title{
     width: 100%;
-    height: 63px;
+    height: auto;
     margin-bottom: 10px;
     background-color: var(--color-fondo-2);
     display: flex;
@@ -40,11 +45,12 @@
     background-color: var(--color-fondo-3);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .dashboard-body .body-title{
+    margin-top: 10px;
     width: 100%;
     text-align: center;
     color: var(--color-texto-1);
@@ -55,17 +61,230 @@
 }
 
 .dashboard-body .body-content{
-    width: 70%;
+    width: 90%;
     margin-top: 20px;
     padding: 0 10px;
 }
 
-form hr.divider{
-    width: 93%;
+/* * Configuración del calendario */
+
+.dashboard-body .body-content-calendar{
+    width: 90%;
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.body-content .container-calendar{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-calendar .header-calendar{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-calendar h3	{
+    color: var(--color-texto-1);
+    font-weight: normal;
+}
+
+.header-calendar button	{
+    color: var(--color-texto-1);
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-calendar .body-calendar{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.body-calendar .week-day{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.week-day .day{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-texto-2);
+    font-weight: bold;
+}
+
+.body-calendar .days{
+    margin-top: 20px;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2%;
+}
+
+.days .day{
+    margin-bottom: 20px;
+    width: 12.28%;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--color-borde-1);
+    color: var(--color-texto-1);
+}
+
+.day span.active{
+    width: 70%;
+    height: 7px;
+    background-color: var(--color-secondary-light);
+    border-radius: 10px;
+}
+
+.days .prev-date{
+    background-color: var(--color-fondo-2);
+    color: var(--color-texto-2);
+}
+
+.days .next-date{
+    background-color: var(--color-fondo-2);
+    color: var(--color-texto-2);
+}
+
+.day.active{
+    font-size: 25px;
+    font-weight: bold;
+    color: var(--color-primary-light);
+}
+
+.days .day:hover{
+    cursor: pointer;
+    background-color: var(--color-primary-light);
+    color: var(--color-texto-1);
+}
+
+.days .day:hover span.active{
+    background-color: #fff;
+}
+
+/* * Fin de la Configuración del calendario */
+
+hr.divider{
+    width: 100%;
     height: 1px;
     border-color: var(--color-primary-dark);
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+hr.divider.hidden{
+    display: none;
+}
+
+.select-container{
+    min-width: 250px;
+    max-width: 300px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.select-container label{
+    color: var(--color-texto-2);
+    margin-bottom: 5px;
+}
+
+.select-container .select-box{
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    border: none;
+    appearance: none;
+    padding: 0 30px 0 15px;
+    color: var(--color-texto-1);
+    background-color: var(--color-fondo-1);
+    font-size: 15px;
+    outline: none;
+}
+
+.select-box option{
+    color: var(--color-texto-1);
+    background-color: var(--color-fondo-1);
+}
+
+.select-container svg{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    color: var(--color-texto-1);
+    pointer-events: none;
+}
+
+.two-rows{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2%;
+    pointer-events: all;
+    opacity: 1;
+    height: auto;
+    transition: all 0.5s ease;
+}
+
+.two-rows.hidden{
+    opacity: 0;
+    height: 0px;
+    pointer-events: none;
+}
+
+.btn-container{
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.btn-container button{
+    padding: 7px 12px;
+    border-radius: 7px;
+    background-color: var(--color-fondo-1);
+    color: var(--color-texto-1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-container button:hover{
+    background-color: var(--color-primary-light);
+}
+
+.btn-container button:focus{
+    background-color: var(--color-primary-light);
 }
 
 form .info-divider h4{
@@ -151,12 +370,122 @@ form input[type="submit"]:focus{
     background-color: var(--color-secondary-light);
 }
 
+.container-btnBack{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container-btnBack.hidden{
+    display: none;
+}
+
+form button.btn-delete{
+    cursor: pointer;
+    width: 60px;
+    height: 100%;
+    padding: 7px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--color-fondo-1);
+    transition: all 0.5s ease;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+form button.btn-delete:hover{
+    background-color: var(--color-primary-dark);
+}
+
+form button.back{
+    cursor: pointer;
+    width: 15%;
+    height: 100%;
+    padding: 7px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--color-fondo-1);
+    transition: all 0.5s ease;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+form button.back:hover{
+    background-color: var(--color-primary-dark);
+}
+
+form button.back:focus{
+    background-color: var(--color-primary-dark);
+}
+
 form .form-control{
     width: 93%;
-    margin-top: 10px;
     display: flex;
     flex-direction: column;
     position: relative;
+}
+
+form .form-control.hidden{
+    display: none;
+}
+
+form textarea{
+    width: 100%;
+    height: 150px;
+    padding: 10px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid var(--color-borde-1);
+    font-weight: bold;
+    color: var(--color-texto-1);
+    background-color: #23252b;
+    transition: all 0.5s ease;
+    font-size: 15px;
+    resize: none;
+}
+
+form textarea:focus{
+    border: 1px solid var(--color-primary-light);
+}
+
+form input[type="number"]{
+    width: 100%;
+    height: 100%;
+    padding: 10px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid var(--color-borde-1);
+    font-weight: bold;
+    color: var(--color-texto-1);
+    background-color: #23252b;
+    transition: all 0.5s ease;
+    font-size: 15px;
+}
+
+form input[type="number"]::placeholder{
+    color: #a0a0a0;
+    font-weight: normal;
+}
+
+form input[type="number"]:focus{
+    border: 1px solid var(--color-primary-light);
+}
+
+form input[type="number"]:focus ~ svg{
+    color: var(--color-primary-light);
 }
 
 .form-control label{
@@ -176,6 +505,179 @@ form .form-control{
     margin-bottom: 20px;
 }
 
+
+.table-container{
+    width: 100%;
+    max-height: 400px;
+    margin-top: 20px;
+    overflow-y: auto;
+    opacity: 1;
+    pointer-events: all;
+    transition: all 0.5s ease;
+}
+
+.table-container table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container.hidden{
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.table-container table td.imgTable{
+    width: 100px;
+    padding: 5px 10px;
+}
+
+.table-container table td.imgTable img{
+    width: 100%;
+    height: 100%;
+}
+
+.table-container table thead{
+    background-color: var(--color-fondo-2);
+    color: var(--color-texto-1);
+    position: sticky;
+    top: -1px;
+}
+
+.table-container table thead tr th{
+    padding: 10px 0;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid var(--color-borde-1);
+}
+
+.table-container table tbody{
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
+    background-color: var(--color-fondo-2);
+    color: var(--color-texto-1);
+}
+
+.table-container table tbody tr{
+    width: 100%;
+    text-align: center;
+}
+
+.table-container table tbody tr td{
+    padding: 10px 0;
+    height: 100%;
+}
+
+.table-container table tbody tr td.table-options a:nth-child(1){
+    margin-right: 10px;
+}
+
+td.table-options a{
+    color: var(--color-texto-1);
+}
+
+td.table-options a:hover{
+    color: var(--color-primary-light);
+}
+
+
+.table-container table tbody tr:nth-child(odd) {
+    background-color: var(--color-borde-1);
+}
+
+.form-container{
+    width: 100%;
+    max-height: 500px;
+    margin-top: 20px;
+    overflow-y: auto;
+    opacity: 1;
+    pointer-events: all;
+    transition: all 0.5s ease;
+}
+
+.form-container.hidden{
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.margin-top{
+    margin-top: 20px;
+}
+
+.margin-bot{
+    margin-bottom: 20px;
+}
+
+.w-50{
+    width: 50%;
+}
+
+.form-control input[type="file"]{
+    display: none;
+}
+
+.form-control label.file{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    background-color: var(--color-fondo-1);
+}
+
+.form-control label.file:hover{
+    background-color: var(--color-primary-dark);
+}
+
+.form-control img.file{
+    width: 100%;
+}
+
+.container-check{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.container-check .label-switch{
+    display: inline-block;
+    width: 55px;
+    height: 30px;
+    background-color: var(--color-fondo-1);
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+}
+
+#btn-switch:checked + .label-switch {
+    background-color: var(--color-primary-light);
+}
+
+.container-check .label-switch::after{
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    width: 22px;
+    height: 22px;
+    border-radius: 100px;
+    background-color: var(--color-primary-light);
+    transition: all 0.3s ease;
+}
+
+#btn-switch:checked + .label-switch::after{
+    left: 28px;
+    background-color: var(--color-fondo-1);
+}
+
+.container-check input[type="checkbox"]{
+    display: none;
+}
+
+.container-check h4{
+    color: var(--color-texto-1);
+}
 
 @media (max-width: 1000px){
     .dashboard-container{

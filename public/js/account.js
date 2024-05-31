@@ -11,7 +11,7 @@ async function changeDataForUser(data) {
                 params.append(key, data[key]);
             }
         }
-        const response = await fetch(`${url}/index.php/Ipanel/changeDataForUser?${params}`);
+        const response = await fetch(`${url}/index.php/ipanel/changeDataForUser?${params}`);
         return response.json();
     } catch (error) {
         console.error('Error:', error);

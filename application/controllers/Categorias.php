@@ -67,5 +67,16 @@ class Categorias extends CI_Controller {
 			return $result;
 		endif;
 	}
+	
+	function getCategorias()
+	{	
+		$this->load->model('Categorias_model');
+		$result = $this->Categorias_model->getCategorias();
+		if(count($result) > 0):
+			echo json_encode($result);
+		else:
+			echo json_encode(false);
+		endif;
+	}
 
 }

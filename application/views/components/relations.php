@@ -1,5 +1,5 @@
 <section class="relations">
-    <h2>relacionados relacionados</h2>
+    <h2>Productos relacionados</h2>
     <div class="relations-container">
         <?php
         $j = 0;

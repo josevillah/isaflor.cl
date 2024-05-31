@@ -81,4 +81,114 @@ class Productos extends CI_Controller {
 			$this->load->view('footers/foot');
 		endif;
 	}
+
+	function searchProduct()
+	{	
+		$datos = $this->input->get('searchCategory');
+		$decoded_datos = urldecode($datos);
+		$this->load->model('Productos_model');
+		$result = $this->Productos_model->searchProduct($decoded_datos);
+		if(count($result) > 0):
+    		echo json_encode($result);
+		endif;
+	}
+
+	function getProductForEdit()
+	{
+		$this->load->model('Productos_model');
+		$id = $this->input->get('searchCategory');
+		$result = $this->Productos_model->getOneProductForEdit($id);
+		if($result):
+			echo json_encode($result);
+		else:
+			echo json_encode(false);
+		endif;
+	}
+
+	 // Definir la función convertToWebp
+	function convertToWebp($source, $destination, $quality = 80) {
+		// Obtener la información de la imagen
+		$info = getimagesize($source);
+		$mime = $info['mime'];
+
+		// Crear una nueva imagen a partir del archivo fuente
+		switch ($mime) {
+			case 'image/jpeg':
+				$image = imagecreatefromjpeg($source);
+				break;
+			case 'image/png':
+				$image = imagecreatefrompng($source);
+				break;
+			default:
+				throw new Exception('Tipo de imagen no soportado: ' . $mime);
+		}
+
+		// Guardar la imagen en formato WEBP
+		if (!imagewebp($image, $destination, $quality)) {
+			throw new Exception('Fallo al guardar la imagen en formato WEBP.');
+		}
+
+		// Liberar memoria
+		imagedestroy($image);
+	}
+
+	function editProduct() {
+		$data = $this->input->post();
+		$file = $_FILES['productImg'];
+
+		if ($file['size'] == 0) {
+			$this->load->model('Productos_model');
+			$result = $this->Productos_model->editProduct($data);
+			if ($result) {
+				echo json_encode(true);
+			} else {
+				echo json_encode(false);
+			}
+			return;
+		}
+
+		// Definir el nombre de archivo de destino para la imagen WEBP
+		$filename = pathinfo($data['idProduct'], PATHINFO_FILENAME) . '.webp';
+		$destination = FCPATH . 'public/img/productos/' . $filename;
+
+		// Crear el directorio si no existe
+		$dir = dirname($destination);
+		if (!is_dir($dir)) {
+			if (!mkdir($dir, 0755, true)) {
+				echo json_encode(['error' => 'No se pudo crear el directorio de destino.']);
+				return;
+			}
+		}
+
+		try {
+			// Convertir la imagen a WEBP
+			$this->convertToWebp($file['tmp_name'], $destination);
+
+			// Actualizar la información de la imagen en los datos del producto
+			$data['productImg'] = 'public/img/productos/' . $filename;
+
+			// Guardar los cambios del producto
+			$this->load->model('Productos_model');
+			$result = $this->Productos_model->editProduct($data);
+			if ($result) {
+				echo json_encode(true);
+			} else {
+				echo json_encode(false);
+			}
+		} catch (Exception $e) {
+			echo json_encode(['error' => $e->getMessage()]);
+		}
+	}
+
+	function editStock() {
+		$data = $this->input->post();
+		$this->load->model('Productos_model');
+		$result = $this->Productos_model->editStock($data);
+		if ($result) {
+			echo json_encode(true);
+		} else {
+			echo json_encode(false);
+		}
+	}
+	
 }

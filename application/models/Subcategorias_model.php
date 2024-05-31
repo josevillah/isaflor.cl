@@ -20,4 +20,16 @@ class Subcategorias_model extends CI_Model {
             return $result;
         endif;
 	}
+    
+	// Function para obtener Todas las categorías
+	function getAllSubcategories()
+	{	
+		$query = $this->db->query("SELECT * FROM categorias ORDER BY nombre ASC");
+        // Verificar si la consulta fue exitosa
+		if($query):
+			// Obtener los resultados como un array
+			$result = $query->result_array();
+            return $result;
+        endif;
+	}
 }
