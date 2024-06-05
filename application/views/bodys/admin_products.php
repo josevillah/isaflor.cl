@@ -5,7 +5,7 @@
                 <div id="searchBar" class="two-rows">
                     <div class="form-control">
                         <label for="searchProduct">Buscar</label>
-                        <input type="text" id="searchProduct" name="searchProduct" placeholder="Nombre o código del producto" required>
+                        <input type="text" id="searchProduct" name="searchProduct" placeholder="Nombre o código del producto">
                         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
                     </div>
                     <div class="btn-container">
@@ -55,12 +55,12 @@
                     <div class="two-rows">
                         <div class="select-container">
                             <label for="selectCategory">Categorías</label>
-                            <select id="selectCategory" name="selectCategory" class="select-box category"></select>
+                            <select id="selectCategory" name="selectCategory" class="select-box category" required></select>
                             <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
                         </div>
                         <div class="select-container">
                             <label for="selectSubcategory">Sub categorías</label>
-                            <select id="selectSubcategory" name="selectSubcategory" class="select-box subcategories"></select>
+                            <select id="selectSubcategory" name="selectSubcategory" class="select-box subcategories" required></select>
                             <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                         <div class="w-50">
                             <div class="form-control">
                                 <label for="productCode">código</label>
-                                <input type="text" id="productCode" name="productCode" placeholder="Código de producto...">
+                                <input type="text" id="productCode" name="productCode" placeholder="Código de producto..." required>
                             </div>
                             <div class="form-control">
                                 <label for="productName">Nombre</label>
@@ -107,7 +107,7 @@
                             </div>
                             <div class="form-control hidden">
                                 <label for="productRend">Rendimiento</label>
-                                <input type="text" id="productRend" name="productRend" placeholder="Rendimiento del producto..." required>
+                                <input type="text" id="productRend" name="productRend" placeholder="Rendimiento del producto...">
                             </div>
                         </div>
                         <div class="w-50">

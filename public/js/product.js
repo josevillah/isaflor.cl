@@ -296,33 +296,6 @@ if(productsTable){
     });
 }
 
-document.querySelector('form').addEventListener('submit', async e => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    try {
-        const result = await fetchFunctionPost(formData, `${url}/index.php/productos/editProduct`);
-        if(result){
-            const myAlert = new Alert();
-            myAlert.show();
-        
-            const confirm = document.querySelector('.alert-accept');
-            
-            confirm.addEventListener('click', async e => {
-                e.preventDefault();
-                myAlert.close();
-                myAlert.showNotification('Cambios realizados con éxito!', 1);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2200);
-            });
-        }
-    } catch (error) {
-        console.error('Error al enviar el formulario:', error);
-    }
-});
-
-
-
 async function selectCategories(){
     try{
         const categories = await fetchFunctionNormal(`${url}/index.php/categorias/getCategorias`);
@@ -378,6 +351,10 @@ searchBar.addEventListener('click', e => {
         resetDataProduct();
         selectCategories();
         const divider = document.querySelector('.divider');
+        const btnCheck = document.querySelector('.btn-check input');
+        const productRend = document.querySelector('#productRend');
+        btnCheck.checked = true;
+        productRend.closest('.form-control').classList.contains('hidden') ? productRend.closest('.form-control').classList.remove('hidden') : productRend.closest('.form-control').classList.add('hidden');
         tableContainer.classList.add('hidden');
         divider.classList.add('hidden');
         searchBar.classList.add('hidden');
@@ -386,3 +363,28 @@ searchBar.addEventListener('click', e => {
     }
 });
 
+
+document.querySelector('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    try {
+        const result = await fetchFunctionPost(formData, `${url}/index.php/productos/newOrEditProduct`);
+        if(result){
+            const myAlert = new Alert();
+            myAlert.show();
+        
+            const confirm = document.querySelector('.alert-accept');
+            
+            confirm.addEventListener('click', async e => {
+                e.preventDefault();
+                myAlert.close();
+                myAlert.showNotification('Cambios realizados con éxito!', 1);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2200);
+            });
+        }
+    } catch (error) {
+        console.error('Error al enviar el formulario:', error);
+    }
+});

@@ -67,8 +67,14 @@ class Ipanel extends CI_Controller {
         $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $arrayUrl = explode('/', $currentURL);
 
-        if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
-            $url = $arrayUrl[6];
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
         endif;
 
         $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
@@ -85,8 +91,14 @@ class Ipanel extends CI_Controller {
     
         $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $arrayUrl = explode('/', $currentURL);
-        if($arrayUrl[5] == 'ipanel'):
-            $url = $arrayUrl[6];
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
         endif;
 
         $this->load->model('usuarios_model');
@@ -130,8 +142,14 @@ class Ipanel extends CI_Controller {
 
         $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $arrayUrl = explode('/', $currentURL);
-        if($arrayUrl[5] == 'ipanel'):
-            $url = $arrayUrl[6];
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
         endif;
 
         $this->load->model('categorias_model');
@@ -167,8 +185,14 @@ class Ipanel extends CI_Controller {
 
         $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $arrayUrl = explode('/', $currentURL);
-        if($arrayUrl[5] == 'ipanel'):
-            $url = $arrayUrl[6];
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
         endif;
 
         $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
@@ -185,8 +209,14 @@ class Ipanel extends CI_Controller {
 
         $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $arrayUrl = explode('/', $currentURL);
-        if($arrayUrl[5] == 'ipanel'):
-            $url = $arrayUrl[6];
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
         endif;
 
         $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));

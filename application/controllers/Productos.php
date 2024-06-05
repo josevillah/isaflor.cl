@@ -132,20 +132,33 @@ class Productos extends CI_Controller {
 		imagedestroy($image);
 	}
 
-	function editProduct() {
+	function newOrEditProduct() {
 		$data = $this->input->post();
 		$file = $_FILES['productImg'];
 
-		if ($file['size'] == 0) {
+		if ($file['size'] == 0):
 			$this->load->model('Productos_model');
 			$result = $this->Productos_model->editProduct($data);
-			if ($result) {
+			if ($result):
 				echo json_encode(true);
-			} else {
+			else:
 				echo json_encode(false);
-			}
+			endif;
 			return;
-		}
+		endif;
+
+		$new = false;
+		
+		if(empty($data['idProduct'])):
+			$this->load->model('Productos_model');
+			$data['idProduct'] = $this->Productos_model->getLastid();
+			$data['idProduct'] = $data['idProduct'] + 1;
+			$new = true;
+		endif;
+
+		if(empty($data['productRend'])):
+			$data['productRend'] = '0';
+		endif;
 
 		// Definir el nombre de archivo de destino para la imagen WEBP
 		$filename = pathinfo($data['idProduct'], PATHINFO_FILENAME) . '.webp';
@@ -169,12 +182,17 @@ class Productos extends CI_Controller {
 
 			// Guardar los cambios del producto
 			$this->load->model('Productos_model');
-			$result = $this->Productos_model->editProduct($data);
-			if ($result) {
+			if($new == false):
+				$result = $this->Productos_model->editProduct($data);
+			else:
+				$result = $this->Productos_model->newProduct($data);
+			endif;
+
+			if ($result):
 				echo json_encode(true);
-			} else {
+			else:
 				echo json_encode(false);
-			}
+			endif;
 		} catch (Exception $e) {
 			echo json_encode(['error' => $e->getMessage()]);
 		}

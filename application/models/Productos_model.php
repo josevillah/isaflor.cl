@@ -222,12 +222,15 @@ class Productos_model extends CI_Model {
         endif;
 	}
 
-	function editProduct($data){
-		// Obtener la fecha actual
-		$query = $this->db->query("SELECT NOW() as fecha_actual");
+	function getLastid(){
+		$query = $this->db->query("SELECT id as productName FROM productos ORDER BY id DESC LIMIT 1");
 		$result = $query->result_array();
-    	$fecha = $result[0]['fecha_actual'];
-		
+		if($result):
+		    return $result[0]['productName'];
+		endif;
+	}
+
+	function editProduct($data){
 		$query = "
 			UPDATE productos SET 
 			codpro = '".$data['productCode']."',
@@ -239,11 +242,41 @@ class Productos_model extends CI_Model {
 			despro = '".$data['productDetails']."',
 			marcapro = '".$data['productTag']."',
 			idsubcat = '".$data['selectSubcategory']."',
-			fecharegistro = '".$fecha."',
 			medida = '".$data['productRend']."'
 			WHERE id = '".$data['idProduct']."';
 		";
 
+		$result = $this->db->query($query);
+        // Verificar si la consulta fue exitosa
+		if($result):
+            return true;
+        endif;
+	}
+	
+	function newProduct($data){		
+		$query = "
+			INSERT INTO productos (
+				id, codpro, nompro, anchpro, largpro, prepro, preoferpro, despro, marcapro, idsubcat, oculto, fecharegistro, urlimagen, medida, cantidad, agregarCarrito)
+			VALUES(
+				'".$data['idProduct']."',
+				'".$data['productCode']."',
+				'".$data['productName']."',
+				'".$data['productAncho']."',
+				'".$data['productLargo']."',
+				'".$data['productPrice']."',
+				'".$data['productOfertPrice']."',
+				'".$data['productDetails']."',
+				'".$data['productTag']."',
+				'".$data['selectSubcategory']."',
+				'0',
+				NOW(),
+				'".$data['productImg']."',
+				'".$data['productRend']."',
+				'1',
+				'0'
+			);
+		";
+		
 		$result = $this->db->query($query);
         // Verificar si la consulta fue exitosa
 		if($result):
