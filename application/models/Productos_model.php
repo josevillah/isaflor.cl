@@ -9,6 +9,14 @@ class Productos_model extends CI_Model {
 		$this->load->database();
     }
 
+	function getDate(){
+		$query = $this->db->query("SELECT NOW() as fecha_actual");
+		$result = $query->result_array();
+		if($result):
+		    return $result[0]['fecha_actual'];
+		endif;
+	}
+
 	function getOfertasProductos()
 	{	
 		$query = $this->db->query("SELECT p.*, c.nombre AS nombre_categoria FROM productos p JOIN categorias c ON p.idsubcat = c.id WHERE p.preoferpro > 0 and oculto = 0 and cantidad > 0 ORDER BY RAND() LIMIT 5");

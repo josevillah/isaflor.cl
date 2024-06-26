@@ -26,12 +26,13 @@ class Home extends CI_Controller {
 		$datosAleatorios = $this->Categorias_model->datosAleatorios;
 
 		// Obtiene la fecha actual para la cache
-		$fecha_actual = date("dmY:H:i:s");
+		$fecha_actual = $this->Productos_model->getDate();
+		$mes_dia_actual = date('d-m', strtotime($fecha_actual));
 
 		// Cargar la vista
 		$this->load->view('headers/header_main', array('title' => $title, 'fecha_actual' => $fecha_actual));
 		$this->load->view('components/menu', array('categorias' => $categorias));
-		$this->load->view('components/slider');
+		$this->load->view('components/slider', array('fecha_actual' => $fecha_actual, 'mes_dia_actual' => $mes_dia_actual));
 		$this->load->view('components/categories', array('destacadas' => $destacadas));
 		$this->load->view('components/oferts', array('ofertas' => $ofertas));
 		$this->load->view('components/brands');
