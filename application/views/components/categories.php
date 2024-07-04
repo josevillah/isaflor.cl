@@ -1,7 +1,7 @@
 <section class="categories">
     <div class="categories-container">
         <div class="categories-title">
-            <h2>Categorías</h2>
+            <h2>Categorías destacadas</h2>
         </div>
         <div class="categories-content">
             <?php foreach ($destacadas as $destacada): ?>
