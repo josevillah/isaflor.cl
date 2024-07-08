@@ -28,7 +28,7 @@ class Home extends CI_Controller {
 		// Obtiene la fecha actual para la cache
 		$fecha_actual = $this->Productos_model->getDate();
 		$mes_dia_actual = date('d-m', strtotime($fecha_actual));
-
+		
 		// Cargar la vista
 		$this->load->view('headers/header_main', array('title' => $title, 'fecha_actual' => $fecha_actual));
 		$this->load->view('components/menu', array('categorias' => $categorias));
