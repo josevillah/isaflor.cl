@@ -51,7 +51,7 @@ class Categorias extends CI_Controller {
 			$title = "Categoría ".isset($productosPage[0]['nombre']);
 			$this->load->view('headers/header_main', array('title' => $title, 'fecha_actual' => $fecha_actual));
 			$this->load->view('components/menu', array('categorias' => $categorias));
-			$this->load->view('bodys/productosCategorias', array('productos' => $productosPage));
+			$this->load->view('bodys/productosCategorias', array('productos' => $productosPage, 'fecha_actual' => $fecha_actual));
 			$this->load->view('components/pagination', array('numero_paginas' => $numero_paginas, 'articulos_x_pagina' => $articulos_x_pagina));
 			$this->load->view('components/buttonUp');
 			$this->load->view('footers/foot');

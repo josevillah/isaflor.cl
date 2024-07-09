@@ -34,10 +34,10 @@ class Home extends CI_Controller {
 		$this->load->view('components/menu', array('categorias' => $categorias));
 		$this->load->view('components/slider', array('fecha_actual' => $fecha_actual, 'mes_dia_actual' => $mes_dia_actual));
 		$this->load->view('components/categories', array('destacadas' => $destacadas));
-		$this->load->view('components/oferts', array('ofertas' => $ofertas));
+		$this->load->view('components/oferts', array('ofertas' => $ofertas, 'fecha_actual' => $fecha_actual));
 		$this->load->view('components/brands');
-		$this->load->view('components/categoryOne', array('categoryOne' => $datosAleatorios['datosUno']));
-		$this->load->view('components/categoryTwo', array('categoryTwo' => $datosAleatorios['datosDos']));
+		$this->load->view('components/categoryOne', array('categoryOne' => $datosAleatorios['datosUno'], 'fecha_actual' => $fecha_actual));
+		$this->load->view('components/categoryTwo', array('categoryTwo' => $datosAleatorios['datosDos'], 'fecha_actual' => $fecha_actual));
 		$this->load->view('components/buttonUp');
 		$this->load->view('footers/foot');
 		$this->load->view('footers/footer_main', array('fecha_actual' => $fecha_actual));

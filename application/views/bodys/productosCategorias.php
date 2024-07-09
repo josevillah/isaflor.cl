@@ -20,7 +20,7 @@
                     </div>
                     <!-- Imagen del producto -->
                     <div class="product-image">
-                        <img src="<?php echo base_url().$productos[$i]['urlimagen']; ?>" alt="">
+                        <img src="<?php echo base_url().$productos[$i]['urlimagen'].'?v='.$fecha_actual; ?>" alt="">
                     </div>
                     <!-- Información del producto -->
                     <div class="product-info">
