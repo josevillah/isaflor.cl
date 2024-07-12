@@ -306,4 +306,21 @@ class Productos_model extends CI_Model {
 		endif;
 	}
 
+	function getAllProductsExcel(){
+		$query = $this->db->query("SELECT p.*, c.nombre AS categoria FROM productos p, categorias c WHERE p.idsubcat = c.id");
+		$result = $query->result_array();
+		if($result):
+		    return $result;
+		endif;
+	}
+
+	function getDateReducida(){
+		$query = $this->db->query("SELECT NOW() as fecha_actual");
+		$result = $query->result_array();
+		if($result){
+			$fecha_actual = $result[0]['fecha_actual'];
+			return date('d M Y', strtotime($fecha_actual));
+		}
+		return null;
+	}
 }

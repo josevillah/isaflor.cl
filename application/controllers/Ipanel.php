@@ -84,6 +84,31 @@ class Ipanel extends CI_Controller {
         $this->load->view('footers/footer_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
     }    
     
+    function inform(){
+        $this->verifySession();
+        $title = 'Dashboard - Panel de control';
+        $fecha_actual = date("dmY:H:i:s");
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
+        endif;
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/inform');
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_inform', array('title' => $title, 'fecha_actual' => $fecha_actual));
+    }
+    
     function account(){
         $this->verifySession();
         $title = 'Dashboard - Panel de control';
@@ -252,6 +277,34 @@ class Ipanel extends CI_Controller {
         else:
             echo json_encode(false);
         endif;
+    }
+
+    function subcategories(){
+        $this->verifySession();
+        $title = 'Dashboard - Subcategorias';
+        $fecha_actual = date("dmY:H:i:s");
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
+        endif;
+
+        $this->load->model('subcategorias_model');
+
+        $subcategorias = $this->subcategorias_model->getAllSubcategories();
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/subcategories', array('subcategorias' => $subcategorias));
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_subcategories', array('title' => $title, 'fecha_actual' => $fecha_actual));
     }
 
     function calendar(){
