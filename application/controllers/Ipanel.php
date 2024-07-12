@@ -137,7 +137,7 @@ class Ipanel extends CI_Controller {
 
     function categories(){
         $this->verifySession();
-        $title = 'Dashboard - Panel de control';
+        $title = 'Dashboard - Categorías';
         $fecha_actual = date("dmY:H:i:s");
 
         $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -176,6 +176,82 @@ class Ipanel extends CI_Controller {
         $this->load->model('categorias_model');
         $categorias = $this->categorias_model->getCategorias();
         echo json_encode($categorias);
+    }
+
+    function newCategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        $this->load->model('categorias_model');
+        $result = $this->categorias_model->newCategory($data);
+        if($result):
+            echo json_encode(true);
+        else:
+            echo json_encode(false);
+        endif;
+    }
+    
+    function editCategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $data = $this->input->get();
+
+        $title = 'Dashboard - Categorías';
+        $fecha_actual = date("dmY:H:i:s");
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
+        endif;
+
+        $this->load->model('categorias_model');
+
+        $categorias = $this->categorias_model->getCategorias();
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/editCategories', array('data' => $data));
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_categories', array('title' => $title, 'fecha_actual' => $fecha_actual));
+    }
+
+    function updateCategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        $this->load->model('categorias_model');
+        $result = $this->categorias_model->updateCategory($data);
+        if($result):
+            echo json_encode(true);
+        else:
+            echo json_encode(false);
+        endif;
+    }
+    
+    function deleteCategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $input = file_get_contents('php://input');
+        $id = json_decode($input, true);
+
+        $this->load->model('categorias_model');
+        $result = $this->categorias_model->deleteCategory($id);
+        if($result):
+            echo json_encode(true);
+        else:
+            echo json_encode(false);
+        endif;
     }
 
     function calendar(){

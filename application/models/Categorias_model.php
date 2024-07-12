@@ -155,4 +155,38 @@ class Categorias_model extends CI_Model {
             return $result;
         endif;
 	}
+	
+	function newCategory($data)
+	{	
+		$query = $this->db->query("INSERT INTO catpadre (nombre, dataCategoria) VALUES ('".$data['categoryName']."', '".$data['categoryName']."')");
+        // Verificar si la consulta fue exitosa
+		if($query):
+			return true;
+        else:
+			return false;
+        endif;
+	}
+	
+	function updateCategory($data)
+	{	
+		$query = $this->db->query("UPDATE catpadre SET nombre = '".$data['categoryName']."' WHERE id = '".$data['id']."'");
+        // Verificar si la consulta fue exitosa
+		if($query):
+			return true;
+        else:
+			return false;
+        endif;
+	}
+	
+	function deleteCategory($id)
+	{	
+		// Verificar si la consulta fue exitosa
+		$query = $this->db->query("DELETE FROM catpadre WHERE id = $id");
+		// Verificar si la consulta fue exitosa
+		if($query):
+			return true;
+		else:
+			return false;
+		endif;
+	}
 }

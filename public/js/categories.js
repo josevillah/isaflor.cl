@@ -1,7 +1,8 @@
 const inputCategory = document.querySelector('input[name="searchCategory"]');
 const url = window.location.origin === 'http://localhost' ? `${window.location.origin}/isaflor.cl` : window.location.origin;
+import { Alert } from './alerts.js';
 
-function fetchFunction(info, urlQuery) {
+async function fetchFunction(info, urlQuery) {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await fetch(urlQuery, {
@@ -23,6 +24,28 @@ function fetchFunction(info, urlQuery) {
             resolve(false);
         }
     });
+}
+
+async function fetchFunctionPost(formData, urlQuery) {
+    try {
+        const response = await fetch(urlQuery, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(formData) // Enviar FormData directamente
+        });
+
+        if (!response.ok) {
+            throw new Error('Error en la solicitud');
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
 }
 
 function addItemsToTable(items) {
@@ -77,13 +100,106 @@ if (inputCategory) {
 const tableCategories = document.querySelector('#categories');
 if(tableCategories){
     tableCategories.addEventListener('click', async (e) => {
+        e.preventDefault();
         let target = e.target;
 
         // Evento click para modificar la categoría
         if(target.closest('a') && target.closest('a').classList.contains('table-edit')){
             target = target.closest('a');
+            const data = {
+                id: target.closest('tr').getAttribute('data-id'),
+                nombre: target.closest('tr').querySelector('td:nth-child(2)').textContent
+            }
+            window.location.href = `${url}/index.php/ipanel/editCategory/?id=${data.id}&nombre=${data.nombre}`;
+        }
+        
+        // Evento click para eliminar la categoría
+        if(target.closest('a') && target.closest('a').classList.contains('table-trash')){
+            target = target.closest('a');
             let id = target.closest('tr').getAttribute('data-id');
-            const response = await fetchFunction(id, `${url}/index.php/ipanel/getCategory`)
+
+            const myAlert = new Alert();
+            myAlert.show();
+            const confirm = document.querySelector('.alert-accept');
+            confirm.addEventListener('click', async (e) => {
+                e.preventDefault();
+                myAlert.close();
+                const response = await fetchFunctionPost(id, `${url}/index.php/ipanel/deleteCategory`);
+                if(response){
+                    myAlert.showNotification('Categoría eliminada', 1);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2200);
+                }else{
+                    myAlert.showNotification('Ups algo ocurrió, vuelve a intentarlo ', 3);
+                }
+            });
+        }
+    });
+}
+
+
+const formNewCategory = document.querySelector('#formNewCategory');
+
+if(formNewCategory){
+    formNewCategory.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(
+            new FormData(e.target)
+        );
+
+        const myAlert = new Alert();
+        myAlert.show();
+        const confirm = document.querySelector('.alert-accept');
+
+        confirm.addEventListener('click', async (e) => {
+            e.preventDefault();
+            myAlert.close();
+            const response = await fetchFunctionPost(data, `${url}/index.php/ipanel/newCategory`);
+            if(response){
+                myAlert.showNotification('Nueva categoría registrada', 1);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2200);
+            }else{
+                myAlert.showNotification('Ups algo ocurrió, vuelve a intentarlo ', 3);
+            }
+        });
+
+    });
+}
+
+const formEditCategory = document.querySelector('#formEditCategory');
+
+if(formEditCategory){
+    formEditCategory.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(
+            new FormData(e.target)
+        );
+
+        if(data.categoryName.length > 0){
+            const myAlert = new Alert();
+            myAlert.show();
+            const confirm = document.querySelector('.alert-accept');
+
+            confirm.addEventListener('click', async (e) => {
+                e.preventDefault();
+                myAlert.close();
+                const response = await fetchFunctionPost(data, `${url}/index.php/ipanel/updateCategory`);
+                if(response){
+                    myAlert.showNotification('Categoría actualizada', 1);
+                    setTimeout(() => {
+                        window.location.href = `${url}/index.php/ipanel/categories`;
+                    }, 2200);
+                }else{
+                    myAlert.showNotification('Ups algo ocurrió, vuelve a intentarlo ', 3);
+                }
+            });
+        }else{
+            const myAlert = new Alert();
+            myAlert.showNotification('El campo no puede estar vacío', 3);
+            return;
         }
     });
 }
