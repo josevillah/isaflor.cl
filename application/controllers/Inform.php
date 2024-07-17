@@ -42,8 +42,8 @@ class Inform extends CI_Controller {
          }
  
          // Aplicar formato a los encabezados
-         $sheet->getStyle('A1:E1')->getFont()->setBold(true);
-         foreach (range('A', 'E') as $columnID) {
+         $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+         foreach (range('A', 'F') as $columnID) {
              $sheet->getColumnDimension($columnID)->setAutoSize(true);
          }
  

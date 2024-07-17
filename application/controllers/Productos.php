@@ -26,7 +26,7 @@ class Productos extends CI_Controller {
 			$this->load->view('headers/header_product', array('title' => $title, 'fecha_actual' => $fecha_actual));
 			$this->load->view('components/menu', array('categorias' => $categorias));
 			$this->load->view('components/buttonUp');
-			$this->load->view('bodys/product_view', array('producto' => $producto));
+			$this->load->view('bodys/product_view', array('producto' => $producto, 'fecha_actual' => $fecha_actual));
 			$this->load->view('components/relations', array('relacionados' => $productosRelacionados));
 			$this->load->view('footers/foot');
 			$this->load->view('footers/footer_product', array('fecha_actual' => $fecha_actual));

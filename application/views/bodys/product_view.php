@@ -1,6 +1,6 @@
 <section class="product-view">
     <div class="product-view-img">
-        <img src="<?php echo base_url().$producto['urlimagen']; ?>" alt="" srcset="">
+        <img src="<?php echo base_url().$producto['urlimagen'].'?v='. $fecha_actual; ?>" alt="" srcset="">
     </div>
     <div class="description-product-view">
         <h1><?php echo $producto['nompro']; ?></h1>
