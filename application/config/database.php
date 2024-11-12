@@ -76,7 +76,7 @@ $query_builder = TRUE;
 if ($_SERVER['HTTP_HOST'] !== 'localhost') {
 	$db['default'] = array(
 		'dsn'	=> '',
-		'hostname' => 'localhost:3306',
+		'hostname' => 'localhost',
 		'username' => 'isaflorc_josevillah',
 		'password' => 'oIs^F2r1^WNg',
 		'database' => 'isaflorc_web',

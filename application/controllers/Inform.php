@@ -7,6 +7,7 @@ class Inform extends CI_Controller {
         parent::__construct();
         // Carga el helper url
         $this->load->helper('url');
+        $this->load->helper('file');
         $this->load->library('session');
         require_once FCPATH . 'vendor/autoload.php';
     }
@@ -62,6 +63,8 @@ class Inform extends CI_Controller {
     }
     
     function generateExcelCategory(){
+        print_r($_POST);
+        print_r($_FILES);
         // Obtener los datos de los productos
         // $this->load->model('Productos_model');
         // $productos = $this->Productos_model->getAllProductsExcel();
