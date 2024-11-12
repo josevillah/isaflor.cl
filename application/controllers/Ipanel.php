@@ -102,9 +102,12 @@ class Ipanel extends CI_Controller {
             endif;
         endif;
 
+        $this->load->model('categorias_model');
+        $categorias = $this->categorias_model->getCategorias();
+
         $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
         $this->load->view('components/admin_menu', array('url' => $url));
-        $this->load->view('bodys/inform');
+        $this->load->view('bodys/inform', array('categorias' => $categorias));
         $this->load->view('components/alerts');
         $this->load->view('footers/footer_admin_inform', array('title' => $title, 'fecha_actual' => $fecha_actual));
     }
