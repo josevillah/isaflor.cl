@@ -101,7 +101,7 @@ if ($_SERVER['HTTP_HOST'] !== 'localhost') {
 		'hostname' => 'localhost',
 		'username' => 'root',
 		'password' => 'leticia1994',
-		'database' => 'isaflordb2024',
+		'database' => 'isaflorc_web',
 		'dbdriver' => 'mysqli',
 		'dbprefix' => '',
 		'pconnect' => FALSE,
