@@ -542,18 +542,18 @@ class Parser
     /**
      * Convert a number token to ptgInt or ptgNum.
      *
-     * @param mixed $num an integer or double for conversion to its ptg value
+     * @param float|int|string $num an integer or double for conversion to its ptg value
      */
     private function convertNumber(mixed $num): string
     {
         // Integer in the range 0..2**16-1
-        if ((preg_match('/^\\d+$/', $num)) && ($num <= 65535)) {
+        if ((preg_match('/^\\d+$/', (string) $num)) && ($num <= 65535)) {
             return pack('Cv', $this->ptg['ptgInt'], $num);
         }
 
         // A float
         if (BIFFwriter::getByteOrder()) { // if it's Big Endian
-            $num = strrev($num);
+            $num = strrev((string) $num);
         }
 
         return pack('Cd', $this->ptg['ptgNum'], $num);
@@ -894,7 +894,11 @@ class Parser
      */
     private function rangeToPackedRange(string $range): array
     {
-        preg_match('/(\$)?(\d+)\:(\$)?(\d+)/', $range, $match);
+        if (preg_match('/(\$)?(\d+)\:(\$)?(\d+)/', $range, $match) !== 1) {
+            // @codeCoverageIgnoreStart
+            throw new WriterException('Regexp failure in rangeToPackedRange');
+            // @codeCoverageIgnoreEnd
+        }
         // return absolute rows if there is a $ in the ref
         $row1_rel = empty($match[1]) ? 1 : 0;
         $row1 = $match[2];
@@ -933,7 +937,11 @@ class Parser
      */
     private function cellToRowcol(string $cell): array
     {
-        preg_match('/(\$)?([A-I]?[A-Z])(\$)?(\d+)/', $cell, $match);
+        if (preg_match('/(\$)?([A-I]?[A-Z])(\$)?(\d+)/', $cell, $match) !== 1) {
+            // @codeCoverageIgnoreStart
+            throw new WriterException('Regexp failure in cellToRowcol');
+            // @codeCoverageIgnoreEnd
+        }
         // return absolute column if there is a $ in the ref
         $col_rel = empty($match[1]) ? 1 : 0;
         $col_ref = $match[2];

@@ -307,7 +307,23 @@ class Productos_model extends CI_Model {
 	}
 
 	function getAllProductsExcel(){
-		$query = $this->db->query("SELECT p.*, c.nombre AS categoria FROM productos p, categorias c WHERE p.idsubcat = c.id");
+		$query = $this->db->query("SELECT * FROM productos where codpro = ''");
+		$result = $query->result_array();
+		if($result):
+		    return $result;
+		endif;
+	}
+	
+	function getAllProductsExcelYesOferts(){
+		$query = $this->db->query("SELECT p.* FROM productos p WHERE p.preoferpro > 1");
+		$result = $query->result_array();
+		if($result):
+		    return $result;
+		endif;
+	}
+	
+	function getAllProductsExcelNoOferts(){
+		$query = $this->db->query("SELECT p.* FROM productos p WHERE p.preoferpro < 1");
 		$result = $query->result_array();
 		if($result):
 		    return $result;
@@ -322,5 +338,69 @@ class Productos_model extends CI_Model {
 			return date('d M Y', strtotime($fecha_actual));
 		}
 		return null;
+	}
+
+	function updateProductForExcel($data){
+		foreach($data as $row){
+
+			if($row['tipo'] === 0):
+				if($row['oferta'] > 0):
+					$query = "
+						UPDATE productos SET 
+						preoferpro = '".$row['precio']."'
+						WHERE codpro = '".$row['codigo']."';
+					";
+				else:
+					$query = "
+						UPDATE productos SET 
+						prepro = '".$row['precio']."'
+						WHERE codpro = '".$row['codigo']."';
+					";
+				endif;
+			elseif($row['tipo'] === 1):
+				$query = "
+						UPDATE productos SET 
+						cantidad = '".$row['stock']."'
+						WHERE codpro = '".$row['codigo']."';
+					";
+			elseif($row['tipo'] === 2):
+				if($row['oferta'] > 0):
+					$query = "
+						UPDATE productos SET 
+						preoferpro = '".$row['precio']."',
+						cantidad = '".$row['stock']."'
+						WHERE codpro = '".$row['codigo']."';
+					";
+				else:
+					$query = "
+						UPDATE productos SET 
+						prepro = '".$row['precio']."',
+						cantidad = '".$row['stock']."'
+						WHERE codpro = '".$row['codigo']."';
+					";
+				endif;
+
+			endif;
+			
+			if(!$this->db->query($query)):
+				return false;
+			endif;
+		}
+
+		return true;
+	}
+
+	// se creo para cargar actualizaciones de productos por listados excel
+	function nuevo($data){
+		foreach($data as $d):
+			$query = "
+					UPDATE productos SET 
+					codpro = '".$d['codigo']."',
+					nompro = '".$d['nombre']."'
+					WHERE nompro like '%".$d['nombre']."%';
+				";
+			$this->db->query($query);
+			// echo $query. "<br>";
+		endforeach;
 	}
 }
