@@ -69,19 +69,25 @@
             <div class="details-meds">
                 <div class="details-title">
                     <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-ruler-measure"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.875 12c.621 0 1.125 .512 1.125 1.143v5.714c0 .631 -.504 1.143 -1.125 1.143h-15.875a1 1 0 0 1 -1 -1v-5.857c0 -.631 .504 -1.143 1.125 -1.143h15.75z" /><path d="M9 12v2" /><path d="M6 12v3" /><path d="M12 12v3" /><path d="M18 12v3" /><path d="M15 12v2" /><path d="M3 3v4" /><path d="M3 5h18" /><path d="M21 3v4" /></svgs>
-                    <h3>Detalles de Medidas</h3>
+                    <h3>Detalles</h3>
                 </div>
+                <?php if($producto['idsubcat'] != 73 && $producto['idsubcat'] != 74): ?>
+                    <div class="detail-med">
+                        <p>Ancho</p>
+                        <p><?php echo $producto['anchpro'] == '' ? 'Sin información': $producto['anchpro'].' cm<sup>2</sup>'; ?></p>
+                    </div>
+                    <div class="detail-med">
+                        <p>Largo</p>
+                        <p><?php echo $producto['largpro'] == '' ? 'Sin información': $producto['largpro'].' cm<sup>2</sup>'; ?></p>
+                    </div>
+                    <div class="detail-med">
+                        <p>Rendimiento</p>
+                        <p><?php echo $producto['medida'] == 0 ? 'Sin información': $producto['medida'].' m<sup>2</sup>'; ?></p>
+                    </div>
+                <?php endif; ?>
                 <div class="detail-med">
-                    <p>Ancho</p>
-                    <p><?php echo $producto['anchpro'] == '' ? 'Sin información': $producto['anchpro'].' cm<sup>2</sup>'; ?></p>
-                </div>
-                <div class="detail-med">
-                    <p>Largo</p>
-                    <p><?php echo $producto['largpro'] == '' ? 'Sin información': $producto['largpro'].' cm<sup>2</sup>'; ?></p>
-                </div>
-                <div class="detail-med">
-                    <p>Rendimiento</p>
-                    <p><?php echo $producto['medida'] == 0 ? 'Sin información': $producto['medida'].' m<sup>2</sup>'; ?></p>
+                    <p>Tallas</p>
+                    <p>Consultar</p>
                 </div>
                 <div class="detail-med">
                     <p>Marca</p>
@@ -89,7 +95,7 @@
                 </div>
                 <div class="details-title">
                     <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svgs=>
-                    <h3>descripción</h3>
+                    <h3>Descripción</h3>
                 </div>
                 <div class="detail-med">
                     <p class="p-detail"><?php echo $producto['despro'] == '' ? 'Sin información': $producto['despro']; ?></p>

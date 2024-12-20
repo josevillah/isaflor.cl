@@ -235,10 +235,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    object-fit: contain;
 }
 
 .product-view-img img{
-    width: 60%;
+    width: auto;
+    height: 100%;
 }
 
 .product-view .description-product-view{

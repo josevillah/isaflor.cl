@@ -47,7 +47,7 @@ class Inform extends CI_Controller {
             $sheet->setCellValue('B' . $row, $producto['nompro']);
             $sheet->setCellValue('C' . $row, $producto['prepro']);
             $sheet->setCellValue('D' . $row, $producto['preoferpro']);
-            // $sheet->setCellValue('E' . $row, $producto['categoria']);
+            $sheet->setCellValue('E' . $row, $producto['categoria']);
             $sheet->setCellValue('F' . $row, $producto['cantidad']);
             $row++;
         }
@@ -220,8 +220,6 @@ class Inform extends CI_Controller {
         }
     }
     
-    
-
     function updateProductForExcel() {
         $response = [];
     
@@ -379,5 +377,120 @@ class Inform extends CI_Controller {
             $this->Productos_model->nuevo($data);
         }
     }
+    
+    function reportNewProducts(){
+        // Verifica que se haya cargado un archivo
+        if (isset($_FILES['fileExcel']) && $_FILES['fileExcel']['error'] == 0) {
+            $filePath = $_FILES['fileExcel']['tmp_name'];
+            $fileName = $_FILES['fileExcel']['name'];
 
+            // Detectar el tipo de archivo según la extensión
+            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+            // Seleccionar el lector adecuado según la extensión
+            if ($fileExtension === 'xlsx') {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            } elseif ($fileExtension === 'xls') {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = "El archivo no es un archivo Excel válido (.xls o .xlsx).";
+                echo json_encode($response);
+                return;
+            }
+
+            // Cargar el archivo Excel
+            try {
+                $spreadsheet = $reader->load($filePath);
+            } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+                $response['status'] = 'error';
+                $response['message'] = "Error al leer el archivo Excel: " . $e->getMessage();
+                echo json_encode($response);
+                return;
+            }
+
+            // Obtener la hoja activa
+            $sheet = $spreadsheet->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+
+            // Leer los datos del archivo Excel
+            $data = [];
+            for ($row = 9; $row <= $highestRow; $row++) {
+                $codigo = $sheet->getCell('G' . $row)->getValue();
+                $nombre = $sheet->getCell('H' . $row)->getValue();
+                $categoria = $sheet->getCell('D' . $row)->getValue();
+                $subcategoria = $sheet->getCell('F' . $row)->getValue();
+                $precio = $sheet->getCell('S' . $row)->getValue();
+                $cantidad = $sheet->getCell('N' . $row)->getValue();
+
+                if ($codigo != '') {
+                    $data[] = [
+                        'codigo' => $codigo,
+                        'nombre' => $nombre,
+                        'categoria' => $categoria,
+                        'subcategoria' => $subcategoria,
+                        'precio' => $precio,
+                        'stock' => $cantidad,
+                    ];
+                }
+            }
+
+            // Obtener los productos del sistema
+            $this->load->model('Productos_model');
+            $productos = $this->Productos_model->getAllProductsExcel();
+
+            // Crear un array con los códigos de los productos del sistema
+            $codigosWeb = array_column($productos, 'codpro');
+
+            // Filtrar los productos no presentes en la página web
+            $productosNoEnWeb = [];
+            foreach ($data as $productoSistema) {
+                if (!in_array($productoSistema['codigo'], $codigosWeb)) {
+                    $productosNoEnWeb[] = $productoSistema;
+                }
+            }
+
+            // Crear un nuevo archivo Excel
+            $newSpreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $newSheet = $newSpreadsheet->getActiveSheet();
+
+            // Escribir encabezados
+            $newSheet->setCellValue('A1', 'Código');
+            $newSheet->setCellValue('B1', 'Nombre de producto');
+            $newSheet->setCellValue('C1', 'Categoría');
+            $newSheet->setCellValue('D1', 'Subcategoría');
+            $newSheet->setCellValue('E1', 'Precio');
+            $newSheet->setCellValue('F1', 'Stock');
+
+            // Estilos
+            $newSheet->getStyle('A1:F1')->getFont()->setBold(true);
+            foreach (range('A', 'F') as $columnID) {
+                $newSheet->getColumnDimension($columnID)->setAutoSize(true);
+            }
+
+            // Escribir datos de los productos no presentes en la página web
+            $rowNum = 2;
+            foreach ($productosNoEnWeb as $productoDos) {
+                $newSheet->setCellValue('A' . $rowNum, $productoDos['codigo']);
+                $newSheet->setCellValue('B' . $rowNum, $productoDos['nombre']);
+                $newSheet->setCellValue('C' . $rowNum, $productoDos['categoria']);
+                $newSheet->setCellValue('D' . $rowNum, $productoDos['subcategoria']);
+                $newSheet->setCellValue('E' . $rowNum, $productoDos['precio']);
+                $newSheet->setCellValue('F' . $rowNum, $productoDos['stock']);
+                $rowNum++;
+            }
+
+            // Descargar el archivo Excel
+            $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($newSpreadsheet);
+            $date = date('Y-m-d');
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="Reporte_Productos_Nuevos_' . $date . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer->save('php://output');
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = "No se pudo cargar el archivo.";
+            echo json_encode($response);
+        }
+    }
 }

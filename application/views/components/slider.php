@@ -1,6 +1,7 @@
 <section class="body">
     <div class="slider-container">
         <div class="slider">            
+            <img src="<?php echo base_url("public/img/banner/banner6.webp").'?'.$fecha_actual; ?>" alt="" srcset="">
             <img src="<?php echo base_url("public/img/banner/banner1.webp").'?'.$fecha_actual; ?>" alt="" srcset="">
             <img src="<?php echo base_url("public/img/banner/banner2.webp").'?'.$fecha_actual; ?>" alt="" srcset="">
             <img src="<?php echo base_url("public/img/banner/banner3.webp").'?'.$fecha_actual; ?>" alt="" srcset="">

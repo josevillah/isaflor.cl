@@ -307,7 +307,7 @@ class Productos_model extends CI_Model {
 	}
 
 	function getAllProductsExcel(){
-		$query = $this->db->query("SELECT * FROM productos where codpro = ''");
+		$query = $this->db->query("select p.*, c.nombre as categoria from productos as p, categorias as c where p.idsubcat = c.id");
 		$result = $query->result_array();
 		if($result):
 		    return $result;

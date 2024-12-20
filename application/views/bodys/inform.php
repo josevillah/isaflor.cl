@@ -5,6 +5,7 @@
             <p>Puedes generar documentos sobre cualquier cosa</p>
         </div>
         <div class="body-content">
+            <!-- Generar informe general de la pagina -->
             <form id="informs" action="">
                 <hr class="divider">
                 <div class="info-divider margin-top margin-bot">
@@ -14,6 +15,7 @@
                     <input type="submit" value="Generar">
                 </div>
             </form>
+            <!-- Compara informe del sistema de ventas con lps codigos de la pagina y mira direfencia de stock y precio -->
             <form id="informForDiference" action="" enctype="multipart/form-data">
                 <hr class="divider">
                 <div class="info-divider margin-top margin-bot">
@@ -36,6 +38,7 @@
                     <input type="submit" value="Verificar datos">
                 </div>
             </form>
+            <!-- Actualizar productos via excel -->
             <form id="updatingData" action="" enctype="multipart/form-data">
                 <hr class="divider">
                 <div class="info-divider margin-top margin-bot">
@@ -56,7 +59,21 @@
                     <input type="file" name="fileExcel" id="idUpdateData" accept=".xls, .xlsx, .csv, .txt" required>
                 </div>
                 <div class="form-control end-form">
-                    <input type="submit" value="Verificar datos">
+                    <input type="submit" value="Actualizar datos">
+                </div>
+            </form>
+            <!-- Generar reporte de productos que no están en la web y si en sistema -->
+            <form id="reportNewProducts" action="" enctype="multipart/form-data">
+                <hr class="divider">
+                <div class="info-divider margin-top margin-bot">
+                    <h4>Generar reporte de productos que no están en la web y si en sistema</h4>
+                </div>
+                <div class="form-control">
+                    <label for="idReportNewProducts" class="file">Adjuntar archivo excel</label>
+                    <input type="file" name="fileExcel" id="idReportNewProducts" accept=".xls, .xlsx, .csv, .txt" required>
+                </div>
+                <div class="form-control end-form">
+                    <input type="submit" value="Productos faltantes">
                 </div>
             </form>
         </div>
