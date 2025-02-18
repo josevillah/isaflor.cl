@@ -23,3 +23,22 @@ const validCharacters = (cadena) => {
     var regex = /^[a-zA-Z0-9\s]+$/;
     return regex.test(cadena);
 }
+
+const containerImgProduct = document.querySelector('.product-view-img');
+const imgProduct = document.querySelector('.product-view-img img');
+
+if (containerImgProduct) {
+    containerImgProduct.addEventListener('mousemove', (e) => {
+        const { left, top, width, height } = containerImgProduct.getBoundingClientRect();
+        const x = ((e.clientX - left) / width) * 100;
+        const y = ((e.clientY - top) / height) * 100;
+
+        imgProduct.style.transformOrigin = `${x}% ${y}%`;
+        imgProduct.style.transform = 'scale(2)';
+    });
+
+    containerImgProduct.addEventListener('mouseleave', () => {
+        imgProduct.style.transformOrigin = 'center';
+        imgProduct.style.transform = 'scale(1)';
+    });
+}

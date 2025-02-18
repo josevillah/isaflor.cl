@@ -85,10 +85,14 @@
                         <p><?php echo $producto['medida'] == 0 ? 'Sin información': $producto['medida'].' m<sup>2</sup>'; ?></p>
                     </div>
                 <?php endif; ?>
-                <div class="detail-med">
-                    <p>Tallas</p>
-                    <p>Consultar</p>
-                </div>
+
+                <?php if($producto['idsubcat'] == 73 || $producto['idsubcat'] == 74): ?>
+                    <div class="detail-med">
+                        <p>Tallas</p>
+                        <p>Consultar</p>
+                    </div>
+                <?php endif; ?>
+                
                 <div class="detail-med">
                     <p>Marca</p>
                     <p><?php echo $producto['marcapro'] == '' ? '': $producto['marcapro']; ?></p>

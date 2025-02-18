@@ -230,6 +230,8 @@
 }
 
 .product-view .product-view-img{
+    cursor: pointer;
+    overflow: hidden;
     width: 50%;
     height: 500px;
     display: flex;
