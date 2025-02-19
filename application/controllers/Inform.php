@@ -80,145 +80,128 @@ class Inform extends CI_Controller {
         $sheet->setCellValue('G' . $row, $stock);
     }
     
-    function generateExcelCategory() {
+    public function generateExcelCategory(){
+        ob_start(); // Iniciar el buffer de salida
         if (isset($_FILES['fileExcel']) && $_FILES['fileExcel']['error'] == 0) {
-    
+            
             $this->load->model('Productos_model');
             $hayOferta = $this->input->post('ofert');
-            if($hayOferta == 0):
+
+            if ($hayOferta == 0) {
                 $productos = $this->Productos_model->getAllProductsExcelNoOferts();
                 $ofert = '0';
-            else:
+            } else {
                 $productos = $this->Productos_model->getAllProductsExcelYesOferts();
                 $ofert = '1';
-            endif;
-    
+            }
+
             $filePath = $_FILES['fileExcel']['tmp_name'];
             $fileName = $_FILES['fileExcel']['name'];
-            
-            // Detectar el tipo de archivo según la extensión
-            $fileExtension = pathinfo($_FILES['fileExcel']['name'], PATHINFO_EXTENSION);
-    
-            // Seleccionar el lector adecuado según el tipo de archivo
+
+            // Verificar la extensión del archivo
+            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
             if ($fileExtension === 'xlsx') {
                 $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
             } elseif ($fileExtension === 'xls') {
                 $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
             } else {
-                die("El archivo no es un archivo Excel válido (.xls o .xlsx).");
+                die(json_encode(["status" => "error", "message" => "Formato no válido."]));
             }
-    
-            // Cargar el archivo Excel
+
             try {
                 $spreadsheet = $reader->load($filePath);
             } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
-                die("Error al leer el archivo Excel: " . $e->getMessage());
+                die(json_encode(["status" => "error", "message" => "Error al leer el archivo: " . $e->getMessage()]));
             }
-    
+
             $sheet = $spreadsheet->getActiveSheet();
             $highestRow = $sheet->getHighestRow();
-            
-            // Leer las columnas necesarias
+
             $codigo = [];
             $nombre = [];
             $cantidad = [];
             $precio = [];
-    
+
             for ($row = 1; $row <= $highestRow; $row++) {
-                $codigo[] = $sheet->getCell('G' . $row)->getValue();
-                $nombre[] = $sheet->getCell('H' . $row)->getValue();
-                $cantidad[] = $sheet->getCell('N' . $row)->getValue();
-                $precio[] = $sheet->getCell('S' . $row)->getValue();
-            }
-    
-            // Crear un nuevo archivo Excel para el reporte
+                $codigo[] = trim($sheet->getCell('G' . $row)->getValue() ?? '');
+                $nombre[] = trim($sheet->getCell('H' . $row)->getValue() ?? '');
+                $cantidad[] = (int) trim($sheet->getCell('N' . $row)->getValue() ?? '0');
+                $precio[] = (float) trim($sheet->getCell('S' . $row)->getValue() ?? '0');
+            }            
+
+            // Crear un nuevo archivo Excel
             $reportSpreadsheet = new Spreadsheet();
             $reportSheet = $reportSpreadsheet->getActiveSheet();
-    
+
             // Encabezados
-            $reportSheet->setCellValue('A1', 'Código');
-            $reportSheet->setCellValue('B1', 'Nombre de producto');
-            $reportSheet->setCellValue('C1', 'Precio web');
-            $reportSheet->setCellValue('D1', 'Precio sistema');
-            $reportSheet->setCellValue('E1', 'Diferencia monetaria');
-            $reportSheet->setCellValue('F1', 'Tiene oferta');
-            $reportSheet->setCellValue('G1', 'Stock');
-    
-            // Estilos
+            $reportSheet->fromArray(
+                ['Código', 'Nombre', 'Precio Web', 'Precio Sistema', 'Diferencia', 'Tiene Oferta', 'Stock'],
+                null,
+                'A1'
+            );
+
             $reportSheet->getStyle('A1:G1')->getFont()->setBold(true);
             foreach (range('A', 'G') as $columnID) {
                 $reportSheet->getColumnDimension($columnID)->setAutoSize(true);
             }
-            
+
             $row = 2;
-    
+
+            $n = 0;
+
             foreach ($productos as $producto) {
+
                 $codigoWeb = $producto['codpro'];
-                if($hayOferta == 0):
-                    $precioWeb = $producto['prepro'];
-                else:
-                    $precioWeb = $producto['preoferpro'];
-                endif;
+                $precioWeb = $hayOferta == 0 ? $producto['prepro'] : $producto['preoferpro'];
                 $stock = $producto['cantidad'];
-                $categoria = $producto['idsubcat'];
-    
+                $categoria = (int) $producto['idsubcat'];
+
                 if ($codigoWeb !== '' && in_array($codigoWeb, $codigo)) {
+
                     $indiceExcel = array_search($codigoWeb, $codigo);
-    
-                    if ($codigoWeb === $codigo[$indiceExcel]) {
-                        $precioExcel = $precio[$indiceExcel];
-    
-                        // Verificar diferencias solo con precio web
-                        $diferencia = 0;
-                        
-                        if ($precioWeb != $precioExcel) {
-                            $diferencia = $precioWeb - $precioExcel;
-                        } else {
-                            $diferencia = 0; // No hay diferencia si el precio web coincide con el del Excel
-                        }
-                        
-                        // Si la diferencia es 0, omitimos la entrada
-                        if ($diferencia == 0) {
-                            continue;
-                        }                        
-    
-                        // Ajustar stock según categoría y cantidad
-                        if (in_array($categoria, ['41', '42', '43', '44'])) { // Construcción
-                            $stock = ($cantidad[$indiceExcel] >= 15) ? '1' : '0';
-                        } elseif (in_array($categoria, ['55', '59', '70', '72'])) { // Terminaciones
-                            $stock = ($cantidad[$indiceExcel] >= 10) ? '1' : '0';
-                        } else { // Otras categorías
-                            $stock = ($cantidad[$indiceExcel] >= 2) ? '1' : '0';
-                        }
-    
-                        // Generar fila en el reporte
-                        $this->generateReportPrice(
-                            $reportSpreadsheet,
-                            $row,
-                            $codigoWeb,
-                            $precioWeb,
-                            $precioExcel,
-                            $nombre[$indiceExcel],
-                            $diferencia,
-                            $stock,
-                            $ofert
-                        );
-                        $row++;
+                    $precioExcel = $precio[$indiceExcel];
+                    
+                    // Calcular diferencia de precio
+                    $diferencia = ($precioWeb != $precioExcel) ? ($precioWeb - $precioExcel) : 0;
+                    //if ($diferencia == 0) continue;
+                    
+                    // Ajustar stock
+                    if (in_array($categoria, [41, 42, 43, 44])) { // Construcción
+                        $stock = ($cantidad[$indiceExcel] >= 50) ? '1' : '0';
+                    } elseif (in_array($categoria, [55, 59, 70, 72])) { // Terminaciones
+                        $stock = ($cantidad[$indiceExcel] >= 10) ? '1' : '0';
+                    } else { // Otras categorías
+                        $stock = ($cantidad[$indiceExcel] >= 2) ? '1' : '0';
                     }
+
+                    // Agregar datos a la fila
+                    $reportSheet->fromArray(
+                        [$codigoWeb, $nombre[$indiceExcel], $precioWeb, $precioExcel, $diferencia, $ofert, $stock],
+                        null,
+                        'A' . $row
+                    );
+
+                    $row++;
                 }
             }
-    
+
+            // Preparar descarga del archivo
             $writer = new Xlsx($reportSpreadsheet);
             $date = date('Y-m-d');
+
+            ob_end_clean(); // Eliminar cualquier salida previa para evitar errores de headers
+
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment; filename="Reporte_Precios_' . $date . '.xlsx"');
             header('Cache-Control: max-age=0');
+            
             $writer->save('php://output');
-    
+            exit;
         } else {
-            echo "No se pudo cargar el archivo.";
+            echo json_encode(["status" => "error", "message" => "No se pudo cargar el archivo."]);
         }
     }
+
     
     function updateProductForExcel() {
         $response = [];
