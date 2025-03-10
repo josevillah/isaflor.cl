@@ -170,6 +170,8 @@ class Inform extends CI_Controller {
                         $stock = ($cantidad[$indiceExcel] >= 50) ? '1' : '0';
                     } elseif (in_array($categoria, [55, 59, 70, 72])) { // Terminaciones
                         $stock = ($cantidad[$indiceExcel] >= 10) ? '1' : '0';
+                    } elseif (in_array($categoria, [19, 20, 21, 24, 25, 61])) { // Calefaccion
+                        $stock = ($cantidad[$indiceExcel] >= 1) ? '1' : '0';
                     } else { // Otras categorías
                         $stock = ($cantidad[$indiceExcel] >= 2) ? '1' : '0';
                     }

@@ -2,24 +2,73 @@ import { Alert } from './alerts.js';
 
 const url = window.location.origin === 'http://localhost' ? `${window.location.origin}/isaflor.cl` : window.location.origin;
 
-async function fetchFunctionPost(formData, urlQuery) {
-    try {
-        const response = await fetch(urlQuery, {
-            method: 'POST',
-            body: formData // Enviar FormData directamente
-        });
-
-        if (!response.ok) {
-            throw new Error('Error en la solicitud');
-        }
-
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
+function formatDoc(cmd, value=null) {
+	if(value) {
+		document.execCommand(cmd, false, value);
+	} else {
+		document.execCommand(cmd);
+	}
 }
+
+function addLink() {
+	const url = prompt('Insert url');
+	formatDoc('createLink', url);
+}
+
+const content = document.getElementById('content');
+
+content.addEventListener('mouseenter', function () {
+	const a = content.querySelectorAll('a');
+	a.forEach(item=> {
+		item.addEventListener('mouseenter', function () {
+			content.setAttribute('contenteditable', false);
+			item.target = '_blank';
+		})
+		item.addEventListener('mouseleave', function () {
+			content.setAttribute('contenteditable', true);
+		})
+	})
+})
+
+const showCode = document.getElementById('show-code');
+let active = false;
+
+showCode.addEventListener('click', function () {
+	showCode.dataset.active = !active;
+	active = !active
+	if(active) {
+		content.textContent = content.innerHTML;
+		content.setAttribute('contenteditable', false);
+	} else {
+		content.innerHTML = content.textContent;
+		content.setAttribute('contenteditable', true);
+	}
+})
+
+const btnToolbar = document.querySelectorAll('.btn-toolbar button');
+
+btnToolbar.forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Buscar el botón más cercano al elemento clickeado
+        const buttonClicked = e.target.closest('button');
+
+        // Verificar si el botón tiene el atributo 'data-id'
+        if (buttonClicked && buttonClicked.hasAttribute('data-id')) {
+            formatDoc(buttonClicked.getAttribute('data-id'));
+        }
+    });
+});
+
+const selectHead = document.querySelectorAll('.head select');
+
+selectHead.forEach(select => {
+    select.addEventListener('change', (e) => {
+        const target = e.target;
+        formatDoc(target.getAttribute('data-id'), target.value);
+    });
+});
 
 async function fetchFunctionGet(info, urlQuery) {
     try {
@@ -104,7 +153,7 @@ function addDataToProduct(product){
     const inputTag = document.querySelector('#productTag');
     const inputAncho = document.querySelector('#productAncho');
     const inputLargo = document.querySelector('#productLargo');
-    const inputDescription = document.querySelector('#productDetails');
+    const inputDescription = document.querySelector('#content');
     const inputRend = document.querySelector('#productRend');
     const btnSwitch = document.querySelector('#btn-switch');
     const btnSubmit = document.querySelector('input[type="submit"]');
@@ -117,7 +166,8 @@ function addDataToProduct(product){
     inputTag.value = product.marcapro;
     inputAncho.value = product.anchpro;
     inputLargo.value = product.largpro;
-    inputDescription.value = product.despro;
+    inputDescription.innerHTML = product.despro;
+
     if(product.medida.length > 0){
         let target = inputRend.closest('.form-control');
         target.classList.remove('hidden');
@@ -135,6 +185,18 @@ function addDataToProduct(product){
     btnSubmit.value = 'Editar Producto';
 }
 
+function clearItemsToTable() {
+    const tableCategories = document.querySelector('#productsTable');
+    tableCategories.querySelector('tbody').innerHTML = ``;
+    let tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>`;
+    tableCategories.querySelector('tbody').appendChild(tr);
+}
+
 const searchProduct = document.querySelector('#searchProduct');
 let timer;
 // Escuchar el evento input para buscar productos
@@ -142,11 +204,23 @@ searchProduct.addEventListener('input', async e => {
     clearTimeout(timer); // Limpiar el temporizador anterior
     timer = setTimeout(async () => {
         const search = e.target.value.toLowerCase().trim();
-        if(search.length > 0){
-            const response = await fetchFunctionGet(search, `${url}/index.php/productos/searchProduct`);
-            if(response.length > 0) {
-                addItemsToTable(response);
-            }
+
+        if(search.length === 0){
+            clearItemsToTable();
+            return;
+        }
+        
+        const response = await fetchFunctionGet(search, `${url}/index.php/productos/searchProduct`);
+
+        if(!response){
+            const alert = new Alert();
+            alert.showNotification('No se encontraron productos', 2);
+            clearItemsToTable();
+            return;
+        }
+
+        if(response.length > 0) {
+            addItemsToTable(response);
         }
     },500);
 })
@@ -207,6 +281,23 @@ function selectSubcategoriesEmpty(product, categories){
     });
 }
 
+async function deleteItem(id, url) {
+    try {
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id }) // Enviamos el ID en el cuerpo
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+    }
+}
+
 if(productsTable){
     productsTable.addEventListener('click', async (e) => {
         e.preventDefault();
@@ -228,6 +319,33 @@ if(productsTable){
             containerButtons.classList.contains('hidden') ? containerButtons.classList.remove('hidden') : containerButtons.classList.add('hidden');
             addDataSelectCategories(product, categories);
             addDataSelectSubcategories(product, subcategories);
+        }
+
+        if(target.closest('a') && target.closest('a').classList.contains('table-trash')){
+            target = target.closest('a');
+            let id = target.closest('tr').getAttribute('data-id');
+            
+            const myAlert = new Alert();
+            myAlert.show();
+            
+            const confirm = document.querySelector('.alert-accept');
+            
+            confirm.addEventListener('click', async e => {
+                e.preventDefault();
+                const response = await deleteItem(id, `${url}/index.php/productos/deleteProduct`);
+
+                if(!response){
+                    myAlert.close();
+                    myAlert.showNotification('Error al eliminar el producto', 0);
+                    return;
+                }
+                
+                myAlert.close();
+                myAlert.showNotification('Producto eliminado con éxito!', 1);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2200);
+            });
         }
     });
 
@@ -325,7 +443,7 @@ function resetDataProduct(){
     const inputTag = document.querySelector('#productTag');
     const inputAncho = document.querySelector('#productAncho');
     const inputLargo = document.querySelector('#productLargo');
-    const inputDescription = document.querySelector('#productDetails');
+    const inputDescription = document.querySelector('#content');
     const inputRend = document.querySelector('#productRend');
     const btnSwitch = document.querySelector('#btn-switch');
     const btnSubmit = document.querySelector('input[type="submit"]');
@@ -338,7 +456,7 @@ function resetDataProduct(){
     inputTag.value = '';
     inputAncho.value = '';
     inputLargo.value = '';
-    inputDescription.value = '';
+    inputDescription.innerHTML = '';
     inputRend.value = '';
     btnSwitch.checked = false;
     btnSubmit.value = 'Nuevo Producto';
@@ -363,10 +481,30 @@ searchBar.addEventListener('click', e => {
     }
 });
 
+async function fetchFunctionPost(formData, urlQuery) {
+    try {
+        const response = await fetch(urlQuery, {
+            method: 'POST',
+            body: formData // Enviar FormData directamente
+        });
+
+        if (!response.ok) {
+            throw new Error('Error en la solicitud');
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
 
 document.querySelector('form').addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    formData.append("productDetails", document.querySelector('#content').innerHTML);
+
     try {
         const result = await fetchFunctionPost(formData, `${url}/index.php/productos/newOrEditProduct`);
         if(result){

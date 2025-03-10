@@ -95,7 +95,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="two-rows margin-top">
+                    <div class="margin-top">
                         <div class="w-50">
                             <div class="form-control">
                                 <label for="productAncho">Ancho</label>
@@ -110,10 +110,52 @@
                                 <input type="text" id="productRend" name="productRend" placeholder="Rendimiento del producto...">
                             </div>
                         </div>
-                        <div class="w-50">
-                            <div class="form-control">
-                                <label for="productDetails">Descripción</label>
-                                <textarea id="productDetails" name="productDetails" placeholder="Detalles del producto..."></textarea>
+                    </div>
+                    <div class="w-80 margin-top">
+                        <div class="form-control">
+                            <div class="container">
+                                <div class="toolbar">
+                                    <div class="head">
+                                        <select data-id="formatBlock">
+                                            <option value="" selected="" hidden="" disabled="">Format</option>
+                                            <option value="h1">Heading 1</option>
+                                            <option value="h2">Heading 2</option>
+                                            <option value="h3">Heading 3</option>
+                                            <option value="h4">Heading 4</option>
+                                            <option value="h5">Heading 5</option>
+                                            <option value="h6">Heading 6</option>
+                                            <option value="p">Paragraph</option>
+                                        </select>
+                                        <select data-id="fontSize">
+                                            <option value="" selected="" hidden="" disabled="">Font size</option>
+                                            <option value="1">Extra small</option>
+                                            <option value="2">Small</option>
+                                            <option value="3">Regular</option>
+                                            <option value="4">Medium</option>
+                                            <option value="5">Large</option>
+                                            <option value="6">Extra Large</option>
+                                            <option value="7">Big</option>
+                                        </select>
+                                    </div>
+                                    <div class="btn-toolbar">
+                                        <button data-id="undo"><i class='bx bx-undo' ></i></button>
+                                        <button data-id="redo"><i class='bx bx-redo' ></i></button>
+                                        <button data-id="bold"><i class='bx bx-bold'></i></button>
+                                        <button data-id="underline"><i class='bx bx-underline' ></i></button>
+                                        <button data-id="italic"><i class='bx bx-italic' ></i></button>
+                                        <button data-id="strikeThrough"><i class='bx bx-strikethrough' ></i></button>
+                                        <button data-id="justifyLeft"><i class='bx bx-align-left' ></i></button>
+                                        <button data-id="justifyCenter"><i class='bx bx-align-middle' ></i></button>
+                                        <button data-id="justifyRight"><i class='bx bx-align-right' ></i></button>
+                                        <button data-id="justifyFull"><i class='bx bx-align-justify' ></i></button>
+                                        <button data-id="insertOrderedList"><i class='bx bx-list-ol' ></i></button>
+                                        <button data-id="insertUnorderedList"><i class='bx bx-list-ul' ></i></button>
+                                        <button data-id="addLink"><i class='bx bx-link' ></i></button>
+                                        <button data-id="unlink"><i class='bx bx-unlink' ></i></button>
+                                        <button id="show-code" data-active="false">&lt;/&gt;</button>
+                                    </div>
+                                </div>
+                                <div id="content" contenteditable="true" spellcheck="false"></div>
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
+import { Alert } from './alerts.js';
 const inputCategory = document.querySelector('input[name="searchCategory"]');
 const url = window.location.origin === 'http://localhost' ? `${window.location.origin}/isaflor.cl` : window.location.origin;
-import { Alert } from './alerts.js';
 
 async function fetchFunction(info, urlQuery) {
     return new Promise(async (resolve, reject) => {

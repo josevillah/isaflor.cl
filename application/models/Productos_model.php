@@ -403,4 +403,17 @@ class Productos_model extends CI_Model {
 			// echo $query. "<br>";
 		endforeach;
 	}
+
+	function deleteProduct($id)
+	{	
+		$this->db->where('id', $id);
+		$this->db->delete('productos');
+        
+		// Verificar si se eliminó algún registro
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

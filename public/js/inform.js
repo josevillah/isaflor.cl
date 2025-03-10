@@ -64,41 +64,6 @@ async function fetchSendData(url, info) {
     }
 }
 
-// async function fetchAndDownload(url, info, nombre) {
-//     try {
-//         const response = await fetch(url, {
-//             method: 'POST',
-//             body: info
-//         });
-
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-
-//         // Convertir la respuesta en un Blob, que es adecuado para archivos binarios
-//         const blob = await response.blob();
-
-//         // Crear un enlace temporal para descargar el archivo
-//         const downloadUrl = window.URL.createObjectURL(blob);
-//         const a = document.createElement('a');
-//         a.href = downloadUrl;
-
-//         // Configurar el nombre del archivo descargado (puedes cambiarlo según tus necesidades)
-//         a.download = `${nombre} ${getCurrentDate()}.xlsx`;
-        
-//         document.body.appendChild(a);
-//         a.click();
-
-//         // Limpiar el enlace temporal
-//         window.URL.revokeObjectURL(downloadUrl);
-//         a.remove();
-
-//     } catch (error) {
-//         console.error('Error:', error);
-//     }
-// }
-
-
 async function fetchFunction(url, info) {
     try {
         const response = await fetch(url, {

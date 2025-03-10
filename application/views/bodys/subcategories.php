@@ -1,18 +1,18 @@
 <section class="dashboard-container">
     <div class="dashboard-body">
         <div class="body-title">
-            <h2>Categorías</h2>
-            <p>Puedes crear y modificar categorías</p>
+            <h2>Subcategorías</h2>
+            <p>Puedes crear y modificar subcategorías</p>
         </div>
         <div class="body-content">
             <form action="" method="POST">
                 <div class="form-control">
-                    <label for="searchCategory">Categorías:</label>
-                    <input type="text" id="searchCategory" name="searchCategory" placeholder="Buscar categorías" required>
+                    <label for="searchSubCategory">Subcategorías:</label>
+                    <input type="text" id="searchSubCategory" name="searchSubCategory" placeholder="Buscar subcategorías" required>
                     <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
                 </div>
                 <div class="table-container">
-                    <table id="categories">
+                    <table id="subcategories">
                         <thead>
                             <th>Nº</th>
                             <th>Nombre</th>
@@ -40,20 +40,30 @@
                     </table>
                 </div>
             </form>
-            <!-- <form id="formNewCategory" action="">
+            <form id="formNewSubcategory" action="">
                 <hr class="divider">
                 <div class="info-divider margin-top margin-bot">
-                    <h4>Crear categoría</h4>
+                    <h4>Crear subcategorías</h4>
+                </div>
+                <div class="select-container">
+                    <label for="selectCategory">Subcategorías</label>
+                    <select id="selectCategory" name="selectCategory" class="select-box category" required>
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <?php foreach($categorias as $categoria): ?>
+                            <option value="<?php echo $categoria['id']; ?>"><?php echo $categoria['nombre']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
                 </div>
                 <div class="form-control">
-                    <label for="categoryName">Nombre de categoría:</label>
-                    <input type="text" class="categoryName" id="categoryName" name="categoryName" placeholder="Nombre de la nueva categoría" required>
+                    <label for="categoryName">Nombre de subcategorías:</label>
+                    <input type="text" class="categoryName" id="categoryName" name="categoryName" placeholder="Nombre de la nueva subcategorías" required>
                     <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-category-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4h6v6h-6zm10 0h6v6h-6zm-10 10h6v6h-6zm10 3h6m-3 -3v6" /></svg>
                 </div>
                 <div class="form-control end-form">
-                    <input type="submit" value="Nueva categoría">
+                    <input type="submit" value="Nueva subcategoría">
                 </div>
-            </form> -->
+            </form>
         </div>
     </div>
 </section>

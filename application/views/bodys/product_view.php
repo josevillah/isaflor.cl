@@ -74,11 +74,11 @@
                 <?php if($producto['idsubcat'] != 73 && $producto['idsubcat'] != 74): ?>
                     <div class="detail-med">
                         <p>Ancho</p>
-                        <p><?php echo $producto['anchpro'] == '' ? 'Sin información': $producto['anchpro'].' cm<sup>2</sup>'; ?></p>
+                        <p><?php echo $producto['anchpro'] == '' ? 'Sin información': $producto['anchpro'].' cm'; ?></p>
                     </div>
                     <div class="detail-med">
                         <p>Largo</p>
-                        <p><?php echo $producto['largpro'] == '' ? 'Sin información': $producto['largpro'].' cm<sup>2</sup>'; ?></p>
+                        <p><?php echo $producto['largpro'] == '' ? 'Sin información': $producto['largpro'].' cm'; ?></p>
                     </div>
                     <div class="detail-med">
                         <p>Rendimiento</p>
@@ -101,7 +101,7 @@
                     <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svgs=>
                     <h3>Descripción</h3>
                 </div>
-                <div class="detail-med">
+                <div class="detail-product">
                     <p class="p-detail"><?php echo $producto['despro'] == '' ? 'Sin información': $producto['despro']; ?></p>
                 </div>
             </div>

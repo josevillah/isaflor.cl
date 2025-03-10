@@ -198,6 +198,22 @@ class Ipanel extends CI_Controller {
         $categorias = $this->categorias_model->searchCategories($data['searchCategory']);
         echo json_encode($categorias);
     }
+    
+    function searchSubCategories(){
+        $this->verifySession();
+        $data = $this->input->post();
+        $this->load->model('subcategorias_model');
+        $subCategorias = $this->subcategorias_model->searchSubCategories($data['searchCategory']);
+        echo json_encode($subCategorias);
+    }
+    
+    function searchAllSubCategories(){
+        $this->verifySession();
+        $data = $this->input->post();
+        $this->load->model('subcategorias_model');
+        $subCategorias = $this->subcategorias_model->searchAllSubCategories();
+        echo json_encode($subCategorias);
+    }
 
     function getAllCategories(){
         $this->verifySession();
@@ -219,6 +235,17 @@ class Ipanel extends CI_Controller {
         else:
             echo json_encode(false);
         endif;
+    }
+    
+    function newSubcategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        $this->load->model('subcategorias_model');
+        $result = $this->subcategorias_model->newSubcategory($data);
+        echo json_encode($result);
     }
     
     function editCategory(){
@@ -252,6 +279,37 @@ class Ipanel extends CI_Controller {
         $this->load->view('footers/footer_admin_categories', array('title' => $title, 'fecha_actual' => $fecha_actual));
     }
 
+    function editSubcategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $data = $this->input->get();
+
+        $title = 'Dashboard - Categorías';
+        $fecha_actual = date("dmY:H:i:s");
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $arrayUrl = explode('/', $currentURL);
+        if ($_SERVER['HTTP_HOST'] == 'localhost'):
+            if($arrayUrl[5] == 'Ipanel' || $arrayUrl[5] == 'ipanel'):
+                $url = $arrayUrl[6];
+            endif;
+        else:
+            if($arrayUrl[4] == 'Ipanel' || $arrayUrl[4] == 'ipanel'):
+                $url = $arrayUrl[5];
+            endif;
+        endif;
+
+        $this->load->model('categorias_model');
+
+        $categorias = $this->categorias_model->getCategorias();
+
+        $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
+        $this->load->view('components/admin_menu', array('url' => $url));
+        $this->load->view('bodys/editSubcategories', array('data' => $data));
+        $this->load->view('components/alerts');
+        $this->load->view('footers/footer_admin_subcategories', array('title' => $title, 'fecha_actual' => $fecha_actual));
+    }
+
     function updateCategory(){
         $this->verifySession();
         // Leer los datos JSON de la entrada
@@ -265,6 +323,28 @@ class Ipanel extends CI_Controller {
         else:
             echo json_encode(false);
         endif;
+    }
+    
+    function updateSubcategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        $this->load->model('subcategorias_model');
+        $result = $this->subcategorias_model->updateSubcategory($data);
+        echo json_encode($result);
+    }
+    
+    function deleteSubcategory(){
+        $this->verifySession();
+        // Leer los datos JSON de la entrada
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        $this->load->model('subcategorias_model');
+        $result = $this->subcategorias_model->deleteSubcategory($data);
+        echo json_encode($result);
     }
     
     function deleteCategory(){
@@ -300,12 +380,14 @@ class Ipanel extends CI_Controller {
         endif;
 
         $this->load->model('subcategorias_model');
+        $this->load->model('categorias_model');
 
-        $subcategorias = $this->subcategorias_model->getAllSubcategories();
+        $subcategorias = $this->subcategorias_model->searchAllSubCategories();
+        $categorias = $this->categorias_model->getCategorias();
 
         $this->load->view('headers/header_admin_dashboard', array('title' => $title, 'fecha_actual' => $fecha_actual));
         $this->load->view('components/admin_menu', array('url' => $url));
-        $this->load->view('bodys/subcategories', array('subcategorias' => $subcategorias));
+        $this->load->view('bodys/subcategories', array('subcategorias' => $subcategorias, 'categorias' => $categorias));
         $this->load->view('components/alerts');
         $this->load->view('footers/footer_admin_subcategories', array('title' => $title, 'fecha_actual' => $fecha_actual));
     }

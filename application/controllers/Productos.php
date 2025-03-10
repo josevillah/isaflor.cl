@@ -33,8 +33,7 @@ class Productos extends CI_Controller {
 		endif;
 	}
 
-	function getProductosNombre($datos)
-	{	
+	function getProductosNombre($datos){	
 		$this->load->model('Productos_model');
 		$result = $this->Productos_model->getProductosNombre($datos);
 		if(count($result) > 0):
@@ -43,8 +42,7 @@ class Productos extends CI_Controller {
 		endif;
 	}
 
-	function viewOferts()
-	{	
+	function viewOferts(){	
 		
 		$url_actual = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		if(base_url() != $url_actual):
@@ -82,8 +80,7 @@ class Productos extends CI_Controller {
 		endif;
 	}
 
-	function searchProduct()
-	{	
+	function searchProduct(){	
 		$datos = $this->input->get('searchCategory');
 		$decoded_datos = urldecode($datos);
 		$this->load->model('Productos_model');
@@ -93,8 +90,7 @@ class Productos extends CI_Controller {
 		endif;
 	}
 
-	function getProductForEdit()
-	{
+	function getProductForEdit(){
 		$this->load->model('Productos_model');
 		$id = $this->input->get('searchCategory');
 		$result = $this->Productos_model->getOneProductForEdit($id);
@@ -202,6 +198,42 @@ class Productos extends CI_Controller {
 		$data = $this->input->post();
 		$this->load->model('Productos_model');
 		$result = $this->Productos_model->editStock($data);
+		if ($result) {
+			echo json_encode(true);
+		} else {
+			echo json_encode(false);
+		}
+	}
+
+	public function searchImageByName($imageName) {
+		$directory = FCPATH . 'public/img/productos/';
+		$imagePath = $directory . $imageName . '.webp';
+	
+		if (file_exists($imagePath)) {
+			return ['exists' => true, 'path' => $imagePath];
+		} else {
+			return ['exists' => false, 'path' => ''];
+		}
+	}
+	
+	function deleteProduct() {
+		$inputData = json_decode(trim(file_get_contents("php://input")), true);
+		$id = intval($inputData['id']);
+
+		// Buscar la imagen asociada
+        $imageData = $this->searchImageByName($id);
+
+        if ($imageData['exists']) {
+            // Verificar si el archivo realmente existe antes de eliminarlo
+            if (file_exists($imageData['path'])) {
+                unlink($imageData['path']); // Eliminar la imagen
+            } else {
+            	return false;
+            }
+        }
+
+		$this->load->model('Productos_model');
+		$result = $this->Productos_model->deleteProduct($id);
 		if ($result) {
 			echo json_encode(true);
 		} else {
