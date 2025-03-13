@@ -238,73 +238,160 @@ class Productos_model extends CI_Model {
 		endif;
 	}
 
-	function editProduct($data){
-		$query = "
-			UPDATE productos SET 
-			codpro = '".$data['productCode']."',
-			nompro = '".$data['productName']."',
-			anchpro = '".$data['productAncho']."',
-			largpro = '".$data['productLargo']."',
-			prepro = '".$data['productPrice']."',
-			preoferpro = '".$data['productOfertPrice']."',
-			despro = '".$data['productDetails']."',
-			marcapro = '".$data['productTag']."',
-			idsubcat = '".$data['selectSubcategory']."',
-			medida = '".$data['productRend']."'
-			WHERE id = '".$data['idProduct']."';
-		";
-
-		$result = $this->db->query($query);
-        // Verificar si la consulta fue exitosa
-		if($result):
-            return true;
-        endif;
-	}
+	function editProduct($data) {
+		// Obtener los datos previos del producto (antes de la actualización)
+		$this->db->where('id', $data['idProduct']);
+		$query = $this->db->get('productos');
+		$oldData = $query->row_array();
 	
-	function newProduct($data){		
-		$query = "
-			INSERT INTO productos (
-				id, codpro, nompro, anchpro, largpro, prepro, preoferpro, despro, marcapro, idsubcat, oculto, fecharegistro, urlimagen, medida, cantidad, agregarCarrito)
-			VALUES(
-				'".$data['idProduct']."',
-				'".$data['productCode']."',
-				'".$data['productName']."',
-				'".$data['productAncho']."',
-				'".$data['productLargo']."',
-				'".$data['productPrice']."',
-				'".$data['productOfertPrice']."',
-				'".$data['productDetails']."',
-				'".$data['productTag']."',
-				'".$data['selectSubcategory']."',
-				'0',
-				NOW(),
-				'".$data['productImg']."',
-				'".$data['productRend']."',
-				'1',
-				'0'
-			);
-		";
-		
-		$result = $this->db->query($query);
-        // Verificar si la consulta fue exitosa
-		if($result):
-            return true;
-        endif;
-	}
+		// Preparar los datos nuevos para la actualización
+		$newData = [
+			'codpro' => $data['productCode'],
+			'nompro' => $data['productName'],
+			'anchpro' => $data['productAncho'],
+			'largpro' => $data['productLargo'],
+			'prepro' => $data['productPrice'],
+			'preoferpro' => $data['productOfertPrice'],
+			'despro' => $data['productDetails'],
+			'marcapro' => $data['productTag'],
+			'idsubcat' => $data['selectSubcategory'],
+			'medida' => $data['productRend'],
+			// Incluir otros campos necesarios si los hay
+		];
 	
-	function editStock($data){
-		$query = "
-			UPDATE productos SET 
-			cantidad = '".$data['stock']."'
-			WHERE id = '".$data['id']."';
-		";
+		// Realizar la actualización
+		$this->db->where('id', $data['idProduct']);
+		$result = $this->db->update('productos', $newData);
+	
+		// Verificar si la consulta fue exitosa
+		if ($result) {
+			// Registrar la auditoría solo si hubo un cambio en los datos
+			$this->load->model('Audit_model');
 
-		$result = $this->db->query($query);
-        // Verificar si la consulta fue exitosa
-		if($result):
+			// Registrar en la auditoría
+			$this->Audit_model->registrar('productos', 'UPDATE', $data['idProduct'], $this->session->userdata('usuario'), $oldData, $newData);
+	
 			return true;
-		endif;
+		} else {
+			return false;
+		}
 	}
+		
+	public function newProduct($data) {
+		// Definir los datos a insertar
+		$data_to_insert = [
+			'id' => $data['idProduct'],
+			'codpro' => $data['productCode'],
+			'nompro' => $data['productName'],
+			'anchpro' => $data['productAncho'],
+			'largpro' => $data['productLargo'],
+			'prepro' => $data['productPrice'],
+			'preoferpro' => $data['productOfertPrice'],
+			'despro' => $data['productDetails'],
+			'marcapro' => $data['productTag'],
+			'idsubcat' => $data['selectSubcategory'],
+			'oculto' => 0,
+			'fecharegistro' => date('Y-m-d H:i:s'),
+			'urlimagen' => $data['productImg'],
+			'medida' => $data['productRend'],
+			'cantidad' => 1,
+			'agregarCarrito' => 0
+		];
+	
+		// Insertar datos en la base de datos
+		if ($this->db->insert('productos', $data_to_insert)) {
+			// Obtener los datos recién insertados
+			$insertedData = $this->db->get_where('productos', ['id' => $data['idProduct']])->row_array();
+	
+			// Registrar en auditoría
+			$this->load->model('Audit_model');
+	
+			$this->Audit_model->registrar(
+				'productos',             // Nombre de la tabla
+				'INSERT',                // Tipo de operación
+				$data['idProduct'],      // ID del producto insertado
+				$_SESSION['usuario'],   // Usuario que realiza la operación
+				null,                    // No hay datos anteriores, ya que es una inserción
+				$insertedData // Datos nuevos (el producto insertado)
+			);
+	
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	public function editStock($data){
+		// Obtener datos actuales antes de la actualización
+		$this->db->where('id', $data['id']);
+		$productoAnterior = $this->db->get('productos')->row_array(); // Datos antes de actualizar stock
+
+		if (!$productoAnterior) {
+			return false; // Si el producto no existe, retornar false
+		}
+
+		// Datos nuevos
+		$nuevosDatos = [
+			'cantidad' => $data['stock']
+		];
+
+		// Actualizar el stock en la base de datos
+		$this->db->where('id', $data['id']);
+		$query = $this->db->update('productos', $nuevosDatos);
+
+		if ($query && $this->db->affected_rows() > 0) {
+			// Cargar el modelo de auditoría
+			$this->load->model('Audit_model');
+
+			// Registrar en auditoría
+			$this->Audit_model->registrar(
+				'productos', 
+				'UPDATE', 
+				$data['id'], 
+				$_SESSION['usuario'], 
+				$productoAnterior, // Datos antes de la actualización
+				$nuevosDatos       // Datos nuevos (solo el stock)
+			);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public function deleteProduct($id) {
+		// Obtener datos actuales antes de la eliminación
+		$this->db->where('id', $id);
+		$productoAnterior = $this->db->get('productos')->row_array(); // Datos antes de la eliminación
+	
+		if (!$productoAnterior) {
+			return false; // Si el producto no existe, retornar false
+		}
+	
+		// Eliminar el producto de la base de datos
+		$this->db->where('id', $id);
+		$query = $this->db->delete('productos');
+	
+		if ($query && $this->db->affected_rows() > 0) {
+			// Cargar el modelo de auditoría
+			$this->load->model('Audit_model');
+	
+			// Registrar en auditoría
+			$this->Audit_model->registrar(
+				'productos',             // Nombre de la tabla
+				'DELETE',                // Tipo de operación
+				$id,                     // ID del producto eliminado
+				$_SESSION['usuario'],   // Usuario que realiza la operación
+				$productoAnterior, // Datos antes de la eliminación
+				null                     // No hay datos nuevos, ya que el producto fue eliminado
+			);
+	
+			return true;
+		}
+	
+		return false;
+	}	
 
 	function getAllProductsExcel(){
 		$query = $this->db->query("select p.*, c.nombre as categoria from productos as p, categorias as c where p.idsubcat = c.id");
@@ -402,18 +489,5 @@ class Productos_model extends CI_Model {
 			$this->db->query($query);
 			// echo $query. "<br>";
 		endforeach;
-	}
-
-	function deleteProduct($id)
-	{	
-		$this->db->where('id', $id);
-		$this->db->delete('productos');
-        
-		// Verificar si se eliminó algún registro
-		if ($this->db->affected_rows() > 0) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 }

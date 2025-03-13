@@ -7,6 +7,7 @@ class Productos extends CI_Controller {
         parent::__construct();
         // Carga el helper url
         $this->load->helper('url');
+		$this->load->library('session');
     }
 
 	function viewProduct($id){

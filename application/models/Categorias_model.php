@@ -156,37 +156,99 @@ class Categorias_model extends CI_Model {
         endif;
 	}
 	
-	function newCategory($data)
-	{	
-		$query = $this->db->query("INSERT INTO catpadre (nombre, dataCategoria) VALUES ('".$data['categoryName']."', '".$data['categoryName']."')");
-        // Verificar si la consulta fue exitosa
-		if($query):
+	function newCategory($data){    
+		$data = [
+			'nombre' => $data['categoryName'],
+			'dataCategoria' => $data['categoryName']
+		];
+	
+		$this->db->insert('catpadre', $data);
+		
+		if ($this->db->affected_rows() > 0) {
+			$id_insertado = $this->db->insert_id(); // Obtener ID insertado
+	
+			// Cargar el modelo de auditoría
+			$this->load->model('audit_model');
+			
+			// Registrar en auditoría (nuevo orden de parámetros)
+			$this->audit_model->registrar('catpadre', 'INSERT', $id_insertado, $_SESSION['usuario'], null, $data);
+			
 			return true;
-        else:
-			return false;
-        endif;
+		}
+		return false;
 	}
 	
-	function updateCategory($data)
-	{	
-		$query = $this->db->query("UPDATE catpadre SET nombre = '".$data['categoryName']."' WHERE id = '".$data['id']."'");
-        // Verificar si la consulta fue exitosa
-		if($query):
-			return true;
-        else:
-			return false;
-        endif;
-	}
 	
-	function deleteCategory($id)
-	{	
-		// Verificar si la consulta fue exitosa
-		$query = $this->db->query("DELETE FROM catpadre WHERE id = $id");
-		// Verificar si la consulta fue exitosa
-		if($query):
+	function updateCategory($data){    
+		// Obtener datos actuales antes de la actualización
+		$this->db->where('id', $data['id']);
+		$categoriaAnterior = $this->db->get('catpadre')->row_array(); // Datos antes de actualizar
+
+		if (!$categoriaAnterior) {
+			return false; // Si no existe la categoría, retornar false
+		}
+
+		// Datos nuevos
+		$datosActualizar = [
+			'nombre' => $data['categoryName']
+		];
+
+		// Realizar la actualización
+		$this->db->where('id', $data['id']);
+		$query = $this->db->update('catpadre', $datosActualizar);
+
+		if ($query) {
+			// Cargar el modelo de auditoría
+			$this->load->model('Audit_model');
+
+			// Registrar en auditoría
+			$this->Audit_model->registrar(
+				'catpadre', 
+				'UPDATE', 
+				$data['id'], 
+				$_SESSION['usuario'], 
+				$categoriaAnterior,  // Datos antes de la actualización
+				$datosActualizar     // Datos después de la actualización
+			);
+
 			return true;
-		else:
-			return false;
-		endif;
+		}
+
+		return false;
 	}
+
+	
+	function deleteCategory($id){    
+		// Obtener datos antes de eliminar
+		$this->db->where('id', $id);
+		$categoriaAnterior = $this->db->get('catpadre')->row_array();
+
+		if (!$categoriaAnterior) {
+			return false; // Si no existe la categoría, retornar false
+		}
+
+		// Eliminar la categoría
+		$this->db->where('id', $id);
+		$query = $this->db->delete('catpadre');
+
+		if ($query) {
+			// Cargar el modelo de auditoría
+			$this->load->model('Audit_model');
+
+			// Registrar en auditoría
+			$this->Audit_model->registrar(
+				'catpadre', 
+				'DELETE', 
+				$id, 
+				$_SESSION['usuario'], 
+				$categoriaAnterior, // Datos antes de la eliminación
+				null                // No hay datos nuevos, ya que se eliminó
+			);
+
+			return true;
+		}
+
+		return false;
+	}
+
 }

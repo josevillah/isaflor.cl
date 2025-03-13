@@ -42,7 +42,7 @@ class Subcategorias_model extends CI_Model {
 	}
 	
 	
-	function newSubcategory($subcat){	
+	function newSubcategory($subcat){    
 		$data = [
 			'nombre' => $subcat['categoryName'],
 			'urlPagina' => $subcat['categoryName'],
@@ -52,34 +52,98 @@ class Subcategorias_model extends CI_Model {
 
 		// Insertar en la base de datos
 		if ($this->db->insert('categorias', $data)) {
+			$id_insertado = $this->db->insert_id(); // Obtener ID de la nueva subcategoría
+
+			// Cargar el modelo de auditoría
+			$this->load->model('Audit_model');
+
+			// Registrar en auditoría
+			$this->Audit_model->registrar(
+				'categorias', 
+				'INSERT', 
+				$id_insertado, 
+				$_SESSION['usuario'], 
+				null,  // No hay datos anteriores
+				$data  // Datos nuevos insertados
+			);
+
 			return true;
-		} else {
-			return false;
-		}
+		} 
+
+		return false;
 	}
 	
-	public function updateSubcategory($info) {    
+	public function updateSubcategory($info){    
+		// Obtener datos actuales antes de la actualización
+		$this->db->where('id', $info['id']);
+		$subcategoriaAnterior = $this->db->get('categorias')->row_array(); // Datos antes de actualizar
+
+		if (!$subcategoriaAnterior) {
+			return false; // Si la subcategoría no existe, retornar false
+		}
+
+		// Datos nuevos
 		$data = [
 			'nombre' => $info['categoryName'],
 			'urlPagina' => $info['categoryName']
 		];
-		
+
 		// Actualizar en la base de datos
-		$this->db->where('id', $info['id']); // Filtrar por el ID de la categoría
-		if ($this->db->update('categorias', $data)) {
+		$this->db->where('id', $info['id']);
+		$query = $this->db->update('categorias', $data);
+
+		if ($query) {
+			// Cargar el modelo de auditoría
+			$this->load->model('Audit_model');
+
+			// Registrar en auditoría
+			$this->Audit_model->registrar(
+				'categorias', 
+				'UPDATE', 
+				$info['id'], 
+				$_SESSION['usuario'], 
+				$subcategoriaAnterior, // Datos antes de la actualización
+				$data                  // Datos nuevos
+			);
+
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
+
 	
-	public function deleteSubcategory($id) {
-		// Eliminar de la base de datos
-		$this->db->where('id', $id); // Filtrar por el ID de la categoría
-		if ($this->db->delete('categorias')) {
-			return true;
-		} else {
-			return false;
+	public function deleteSubcategory($id){    
+		// Obtener datos antes de eliminar
+		$this->db->where('id', $id);
+		$subcategoriaAnterior = $this->db->get('categorias')->row_array(); // Datos antes de borrar
+
+		if (!$subcategoriaAnterior) {
+			return false; // Si la subcategoría no existe, retornar false
 		}
+
+		// Eliminar la subcategoría
+		$this->db->where('id', $id);
+		$query = $this->db->delete('categorias');
+
+		if ($query) {
+			// Cargar el modelo de auditoría
+			$this->load->model('Audit_model');
+
+			// Registrar en auditoría
+			$this->Audit_model->registrar(
+				'categorias', 
+				'DELETE', 
+				$id, 
+				$_SESSION['usuario'], 
+				$subcategoriaAnterior, // Datos antes de la eliminación
+				null                  // No hay datos nuevos, ya que se eliminó
+			);
+
+			return true;
+		}
+
+		return false;
 	}
+
 }
